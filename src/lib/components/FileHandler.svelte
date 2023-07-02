@@ -1,0 +1,85 @@
+<script lang="ts">
+    /**
+     * The go
+    */
+    import Select, { Option } from '@smui/select';
+
+    import ExtractAudioTracks from "../audio/ExtractAudioTracks.svelte";
+    import FindAudioTracks from "../audio/FindAudioTracks.svelte";
+    import Model from '../pickers/Model.svelte';
+
+    let files: FileList;
+    let audio_tracks;
+    let track_extract;
+    let value = 0;
+
+    let track_data: Array<object> = [];
+
+    let executed: boolean = false;
+    let hide_tracks: boolean = false;
+
+    export let audio_data;
+
+
+
+    $: if (files) {
+        if(!executed) {
+            // 1. Retrieve the File Tracks
+            console.log(files);
+            console.log(`${files[0].name}: ${files[0].size} bytes`);
+           
+            // 2. Look Up Audio Tracks
+            audio_tracks.listAudioTracks(files[0]).then((data) => {
+                track_data = data;
+                console.log(track_data)
+                executed = true;
+            }).catch((err: Error) => {
+                alert(err)
+            });
+            executed = true;
+        }
+	}
+
+    async function extract_audio () {
+        console.log('exec')
+        console.log(value)
+        
+        if(value != undefined){
+            await track_extract.extractAudio(value, files[0]).then((data) => {
+                hide_tracks = true;
+                console.log(data)
+                console.log('FILEHANDLER')
+                console.log(audio_data)
+            }).catch((err: Error) => {
+                console.log(err)
+            });
+        }
+    }
+
+    $: value, extract_audio();
+
+</script>
+
+{#if !executed}
+  <input 
+    type="file" 
+    accept="video/*, audio/*"
+    bind:files
+  />
+{/if}
+
+  <FindAudioTracks bind:this={audio_tracks}></FindAudioTracks>
+  <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data  }></ExtractAudioTracks>
+
+{#if !hide_tracks}
+
+    <Select bind:value label="Select Audio Track">
+    {#each track_data as track}
+            <Option value={track['index']}>
+                {track["codec_name"]} - 
+                {track['tags']['language'] != undefined ? track['tags']['language'] : ''} - 
+                {track['tags']['title'] != undefined ? track['tags']['title'] : ''}
+            </Option>
+    {/each}
+    </Select>
+{/if}

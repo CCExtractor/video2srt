@@ -1,0 +1,67 @@
+<script lang="ts">
+    import Select, { Option } from '@smui/select';
+    export let value;
+</script>
+
+<Select bind:value label="Select Language">
+    <Option value="en">English</Option>
+    <Option value="ar">Arabic</Option>
+    <Option value="hy">Armenian</Option>
+    <Option value="az">Azerbaijani</Option>
+    <Option value="eu">Basque</Option>
+    <Option value="be">Belarusian</Option>
+    <Option value="bn">Bengali</Option>
+    <Option value="bg">Bulgarian</Option>
+    <Option value="ca">Catalan</Option>
+    <Option value="zh">Chinese</Option>
+    <Option value="hr">Croatian</Option>
+    <Option value="cs">Czech</Option>
+    <Option value="da">Danish</Option>
+    <Option value="nl">Dutch</Option>
+    <Option value="et">Estonian</Option>
+    <Option value="tl">Filipino</Option>
+    <Option value="fi">Finnish</Option>
+    <Option value="fr">French</Option>
+    <Option value="gl">Galician</Option>
+    <Option value="ka">Georgian</Option>
+    <Option value="de">German</Option>
+    <Option value="el">Greek</Option>
+    <Option value="gu">Gujarati</Option>
+    <Option value="iw">Hebrew</Option>
+    <Option value="hi">Hindi</Option>
+    <Option value="hu">Hungarian</Option>
+    <Option value="is">Icelandic</Option>
+    <Option value="id">Indonesian</Option>
+    <Option value="ga">Irish</Option>
+    <Option value="it">Italian</Option>
+    <Option value="ja">Japanese</Option>
+    <Option value="kn">Kannada</Option>
+    <Option value="ko">Korean</Option>
+    <Option value="la">Latin</Option>
+    <Option value="lv">Latvian</Option>
+    <Option value="lt">Lithuanian</Option>
+    <Option value="mk">Macedonian</Option>
+    <Option value="ms">Malay</Option>
+    <Option value="mt">Maltese</Option>
+    <Option value="no">Norwegian</Option>
+    <Option value="fa">Persian</Option>
+    <Option value="pl">Polish</Option>
+    <Option value="pt">Portuguese</Option>
+    <Option value="ro">Romanian</Option>
+    <Option value="ru">Russian</Option>
+    <Option value="sr">Serbian</Option>
+    <Option value="sk">Slovak</Option>
+    <Option value="sl">Slovenian</Option>
+    <Option value="es">Spanish</Option>
+    <Option value="sw">Swahili</Option>
+    <Option value="sv">Swedish</Option>
+    <Option value="ta">Tamil</Option>
+    <Option value="te">Telugu</Option>
+    <Option value="th">Thai</Option>
+    <Option value="tr">Turkish</Option>
+    <Option value="uk">Ukrainian</Option>
+    <Option value="ur">Urdu</Option>
+    <Option value="vi">Vietnamese</Option>
+    <Option value="cy">Welsh</Option>
+    <Option value="yi">Yiddish</Option>
+</Select>

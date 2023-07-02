@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="node_modules/svelte-material-ui/bare.css" />
+    <title>Vite + Svelte + TS</title>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script> -->
+  </head>
+  <script>
+    window.SUB_DATA = [];
+
+    const printWhisper = (function() {
+      return function text(args){
+          if (arguments.length > 1) args = Array.prototype.slice.call(arguments).join(' ');
+          if(args.includes('-->')){
+              window.SUB_DATA = [...SUB_DATA, args]
+              console.log("HELLOOOO!")
+              console.log(SUB_DATA)
+
+              const event = new CustomEvent('newSubsAdded', { subs: window.SUB_DATA });
+              window.dispatchEvent(event);
+
+          }
+
+          console.log('hello: ' + args)
+      };
+    })();
+
+    var Module = {
+      print: printWhisper
+    }
+  </script>
+  <body>
+    <div id="app"></div>
+    <!--- <script src="/src/assets/js/libmain.js" defer></script> --->
+    <script type="module" src="/src/main.ts"></script>
+    <script src="/src/assets/js/main.js"></script>
+  </body>
+</html>
