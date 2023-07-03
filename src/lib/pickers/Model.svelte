@@ -161,10 +161,10 @@
        }
 
        let url = ""
-       if (import.meta.env.WHISPER_MODEL_URL_LOCATION == undefined) {
+       if (import.meta.env.VITE_WHISPER_MODEL_URL_LOCATION == undefined) {
         url = `/src/models/${value}`
        } else {
-        url = `${import.meta.env.WHISPER_MODEL_URL_LOCATION}/${value}`
+        url = `${import.meta.env.VITE_WHISPER_MODEL_URL_LOCATION}/${value}`
        }
        
 

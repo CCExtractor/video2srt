@@ -47,3 +47,4 @@ package
 node_modules/
 
 src/models/
+node_modules
