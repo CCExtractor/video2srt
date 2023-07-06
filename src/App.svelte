@@ -3,12 +3,14 @@
   import CircularProgress from '@smui/circular-progress';
   import Model from "./lib/pickers/Model.svelte";
   import Languages from "./lib/pickers/Languages.svelte";
+  import SRT from "./lib/subtitle_conversions/SRT.svelte";
 
   let audio_data;
   let useWhisper;
   let whisper_text;
   let whisper_captions;
   let stored_model;
+  let convert_to_srt;
 
   let SUB_DATA = [];
   let language = "en";
@@ -26,6 +28,7 @@
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
     console.log(SUB_DATA)
+    convert_to_srt(SUB_DATA)
   }
   
   window.addEventListener('newSubsAdded', handleSubs);
@@ -52,6 +55,7 @@
       <p>{sub}</p>
     {/each}
     <p>Full Array: {SUB_DATA}</p>
+    <SRT bind:convert_to_srt={convert_to_srt}></SRT>
   {/if}
 </main>
 
