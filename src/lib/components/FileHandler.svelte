@@ -58,7 +58,7 @@
     $: value, extract_audio();
 
 </script>
-
+<div class="flex flex-row gap-3 items-center py-3">
 {#if !executed}
   <input 
     type="file" 
@@ -73,7 +73,7 @@
 {#if !hide_tracks}
 
     <select bind:value class="select select-bordered">
-    <option class="selected disabled">Select Audio Track</option>
+    <option selected disabled>Select Audio Track</option>
     {#each track_data as track}
             <option value={track['index']}>
                 {track["codec_name"]} - 
@@ -83,3 +83,4 @@
     {/each}
     </select>
 {/if}
+</div>

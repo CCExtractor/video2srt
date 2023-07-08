@@ -35,9 +35,11 @@
 </script>
 
 <main>
-  <h1>Video 2 SRT</h1>
+  <span class="block text-5xl text-center w-full py-3">Video 2 SRT</span>
+  <div class="flex flex-row gap-3 pb-3">
   <Model bind:useWhisper={useWhisper} bind:WHISPER_RETURN_DATA={whisper_captions} bind:STORED_MODEL={stored_model}></Model>
   <Languages bind:value={language}></Languages>
+  </div>
   {#if stored_model}
     <p style="color:green">Model Ready to use!</p>
   {/if}

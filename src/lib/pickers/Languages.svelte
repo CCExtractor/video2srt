@@ -3,7 +3,7 @@
 </script>
 
 <select class="select select-bordered" bind:value>
-    <option class="selected disabled">Select Language</option>
+    <option selected disabled>Select Language</option>
     <option value="en">English</option>
     <option value="ar">Arabic</option>
     <option value="hy">Armenian</option>

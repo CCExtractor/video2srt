@@ -154,6 +154,7 @@
          * for a user to later use it.
 
         */
+       popup.classList.remove("modal-open");
        if(value == undefined) {
         return
        }
@@ -250,7 +251,7 @@
 </script>
 
 <select class="select select-bordered w-full max-w-xs" bind:value>
-    <option value="disabled selected">Select Model for Whisper</option>
+    <option disabled selected>Select Model for Whisper</option>
     <option value="ggml-model-whisper-base.bin">Base</option>
     <option value="ggml-model-whisper-base.en.bin">Base EN</option>
     <option value="ggml-model-whisper-small.bin">Small</option>
@@ -259,21 +260,18 @@
     <option value="ggml-model-whisper-tiny.en.bin">Tiny EN</option>
 </select>
 
-<dialog
-  bind:this={popup}
-  aria-labelledby="simple-title"
-  aria-describedby="simple-content"
-  class="modal"
->
-  <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-  <h3 class="font-bold text-lg">{MODEL_TITLE}!</h3>
-  <p class="py-4">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</p>
-  <div class="modal-action">
-    <button on:click={() => popup.classList.remove("modal-open")}>
-        No
-    </button>
-    <button on:click={() => downloadModel()}>
-        Yes
-    </button>
-    </div>
+<dialog bind:this={popup} class="modal">
+    <form method="dialog" class="modal-box">
+      <h3 class="font-bold text-lg">{MODEL_TITLE}</h3>
+      <p class="py-4">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</p>
+      <div class="modal-action">
+        <!-- if there is a button in form, it will close the modal -->
+        <button on:click={() => popup.classList.remove("modal-open")}>
+            No
+        </button>
+        <button on:click={() => downloadModel()}>
+            Yes
+        </button>
+      </div>
+    </form>
 </dialog>
