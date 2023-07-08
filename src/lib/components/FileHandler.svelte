@@ -2,7 +2,6 @@
     /**
      * The go
     */
-    import Select, { Option } from '@smui/select';
 
     import ExtractAudioTracks from "../audio/ExtractAudioTracks.svelte";
     import FindAudioTracks from "../audio/FindAudioTracks.svelte";
@@ -73,13 +72,14 @@
 
 {#if !hide_tracks}
 
-    <Select bind:value label="Select Audio Track">
+    <select bind:value class="select select-bordered">
+    <option class="selected disabled">Select Audio Track</option>
     {#each track_data as track}
-            <Option value={track['index']}>
+            <option value={track['index']}>
                 {track["codec_name"]} - 
                 {track['tags']['language'] != undefined ? track['tags']['language'] : ''} - 
                 {track['tags']['title'] != undefined ? track['tags']['title'] : ''}
-            </Option>
+            </option>
     {/each}
-    </Select>
+    </select>
 {/if}

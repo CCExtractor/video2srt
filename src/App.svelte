@@ -1,6 +1,5 @@
 <script lang="ts">
   import FileHandler from "./lib/components/FileHandler.svelte";
-  import CircularProgress from '@smui/circular-progress';
   import Model from "./lib/pickers/Model.svelte";
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
@@ -36,7 +35,7 @@
 </script>
 
 <main>
-  <h3>Settings</h3>
+  <h1>Video 2 SRT</h1>
   <Model bind:useWhisper={useWhisper} bind:WHISPER_RETURN_DATA={whisper_captions} bind:STORED_MODEL={stored_model}></Model>
   <Languages bind:value={language}></Languages>
   {#if stored_model}
@@ -46,7 +45,8 @@
   <FileHandler bind:audio_data={audio_data}></FileHandler>
   <hr>
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
-    <CircularProgress></CircularProgress>
+  <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
+    <div class="radial-progress" style="--value:70;">70%</div>
     <p>Loading... Depending on the audio length it may take time</p>
     {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}
@@ -60,19 +60,5 @@
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+
 </style>
