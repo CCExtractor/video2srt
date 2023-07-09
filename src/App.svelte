@@ -48,7 +48,7 @@
   <hr>
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
   <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
-    <div class="radial-progress" style="--value:70;">70%</div>
+    <!-- <div class="radial-progress" style="--value:70;">70%</div> -->
     <p>Loading... Depending on the audio length it may take time</p>
     {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}

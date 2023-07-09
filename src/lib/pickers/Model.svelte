@@ -92,7 +92,9 @@
                     // Found Model
                     storeFS(connection.result);
                 } else {
+                    if (value != "Select Model for Whisper"){
                     popup.classList.add("modal-open");
+                    }
                 }
             }
 
