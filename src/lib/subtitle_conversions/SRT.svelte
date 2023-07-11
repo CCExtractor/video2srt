@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Button, { Label } from '@smui/button';
     const regex = /\[(\d{2}:\d{2}:\d{2})\.(\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2})\.(\d{3})\]/;
 
     let HREF = ""
@@ -31,6 +30,6 @@
     }
 </script>
 
-<a href={HREF} download={FILENAME}><Button color="secondary"variant="raised">
-    <Label>Download SRT</Label>
-</Button></a>
+<a href={HREF} download={FILENAME}><button class="btn-secondary">
+    Download SRT
+</button></a>

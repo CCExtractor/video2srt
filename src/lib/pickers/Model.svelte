@@ -1,7 +1,5 @@
 <script lang="ts">
-    import Select, { Option } from '@smui/select';
-    import Dialog, { Title, Content, Actions } from '@smui/dialog';
-    import Button, { Label } from '@smui/button';
+    let popup:HTMLDialogElement;
 
     import { 
         REQUEST_FAILED, 
@@ -15,12 +13,12 @@
 
     import { MODEL_TO_SIZE } from './file_sizes.js';
 
+
     // Values for the UI
     export let value = undefined;
     export let WHISPER_RETURN_DATA = undefined;
     export let STORED_MODEL = false;
 
-    let open = false;
 
     // Values for the Database
     const DB_NAME = "WHISPER_TRANSCRIBE";
@@ -94,7 +92,9 @@
                     // Found Model
                     storeFS(connection.result);
                 } else {
-                    open = true;
+                    if (value != "Select Model for Whisper"){
+                    popup.classList.add("modal-open");
+                    }
                 }
             }
 
@@ -156,6 +156,7 @@
          * for a user to later use it.
 
         */
+       popup.classList.remove("modal-open");
        if(value == undefined) {
         return
        }
@@ -251,29 +252,28 @@
 
 </script>
 
-<Select bind:value label="Select Model for Whisper">
-    <Option value="ggml-model-whisper-base.bin">Base</Option>
-    <Option value="ggml-model-whisper-base.en.bin">Base EN</Option>
-    <Option value="ggml-model-whisper-small.bin">Small</Option>
-    <Option value="ggml-model-whisper-small.en.bin">Small EN</Option>
-    <Option value="ggml-model-whisper-tiny.bin">Tiny</Option>
-    <Option value="ggml-model-whisper-tiny.en.bin">Tiny EN</Option>
-</Select>
+<select class="select select-bordered w-full max-w-xs" bind:value>
+    <option disabled selected>Select Model for Whisper</option>
+    <option value="ggml-model-whisper-base.bin">Base</option>
+    <option value="ggml-model-whisper-base.en.bin">Base EN</option>
+    <option value="ggml-model-whisper-small.bin">Small</option>
+    <option value="ggml-model-whisper-small.en.bin">Small EN</option>
+    <option value="ggml-model-whisper-tiny.bin">Tiny</option>
+    <option value="ggml-model-whisper-tiny.en.bin">Tiny EN</option>
+</select>
 
-<Dialog
-  bind:open
-  aria-labelledby="simple-title"
-  aria-describedby="simple-content"
->
-  <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-  <Title id="simple-title">{MODEL_TITLE}</Title>
-  <Content id="simple-content">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</Content>
-  <Actions>
-    <Button on:click={() => open = false}>
-      <Label>No</Label>
-    </Button>
-    <Button on:click={() => downloadModel()}>
-      <Label>Yes</Label>
-    </Button>
-  </Actions>
-</Dialog>
+<dialog bind:this={popup} class="modal">
+    <form method="dialog" class="modal-box">
+      <h3 class="font-bold text-lg">{MODEL_TITLE}</h3>
+      <p class="py-4">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</p>
+      <div class="modal-action">
+        <!-- if there is a button in form, it will close the modal -->
+        <button on:click={() => popup.classList.remove("modal-open")}>
+            No
+        </button>
+        <button on:click={() => downloadModel()}>
+            Yes
+        </button>
+      </div>
+    </form>
+</dialog>

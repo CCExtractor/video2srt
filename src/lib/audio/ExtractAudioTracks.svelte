@@ -2,16 +2,16 @@
     /* ExtractAudioTracks.svelte
     */
     import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-    import CircularProgress from '@smui/circular-progress';
-    import LinearProgress from '@smui/linear-progress';
 
     let progress = 0;
+    let ProgressMeter:HTMLDivElement;
 
     const ffmpeg = createFFmpeg({ 
         log: true,
         progress: p => {
             console.log(p)
             progress = p['ratio'] * 100;
+            ProgressMeter.style.setProperty("--value",String(progress));
         },
     });
 
@@ -90,8 +90,7 @@
 </script>
 
 {#if started}
-    <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-    <p>{progress} / 100</p>
+    <div class="radial-progress" bind:this={ProgressMeter} style="--value:0">{progress}%</div>
     {/if}
 
 {#if show_audio}
