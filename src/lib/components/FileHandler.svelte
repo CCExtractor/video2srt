@@ -17,7 +17,9 @@
     let executed: boolean = false;
     let hide_tracks: boolean = false;
 
+    export let video_url;
     export let audio_data;
+    export let video_type;
 
 
 
@@ -26,7 +28,9 @@
             // 1. Retrieve the File Tracks
             console.log(files);
             console.log(`${files[0].name}: ${files[0].size} bytes`);
-           
+            video_url = URL.createObjectURL(files[0]);
+            video_type = files[0].type;
+
             // 2. Look Up Audio Tracks
             audio_tracks.listAudioTracks(files[0]).then((data) => {
                 track_data = data;

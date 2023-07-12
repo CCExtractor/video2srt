@@ -3,13 +3,20 @@
   import Model from "./lib/pickers/Model.svelte";
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
+  import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
 
   let audio_data;
   let useWhisper;
   let whisper_text;
   let whisper_captions;
   let stored_model;
+
   let convert_to_srt;
+  let convert_to_webvtt;
+
+  let video_url;
+  let subtitles_URL;
+  let video_type;
 
   let SUB_DATA = [];
   let language = "en";
@@ -26,8 +33,9 @@
 
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
-    console.log(SUB_DATA)
-    convert_to_srt(SUB_DATA)
+    console.log(SUB_DATA);
+    convert_to_srt(SUB_DATA);
+    convert_to_webvtt(SUB_DATA);
   }
   
   window.addEventListener('newSubsAdded', handleSubs);
@@ -44,7 +52,7 @@
     <p style="color:green">Model Ready to use!</p>
   {/if}
   <hr>
-  <FileHandler bind:audio_data={audio_data}></FileHandler>
+  <FileHandler bind:audio_data={audio_data} bind:video_url={video_url}></FileHandler>
   <hr>
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
   <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
@@ -57,6 +65,11 @@
       <p>{sub}</p>
     {/each}
     <p>Full Array: {SUB_DATA}</p>
+    <video controls width=360 height=360>
+      <source src={video_url} type={video_type}/>
+      <track label="Output" kind="captions" src={subtitles_URL} default />
+    </video>
+    <WebVtt bind:convert_to_webvtt={convert_to_webvtt} bind:HREF={subtitles_URL}></WebVtt>
     <SRT bind:convert_to_srt={convert_to_srt}></SRT>
   {/if}
 </main>
