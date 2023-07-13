@@ -13,6 +13,9 @@
     window.SUB_DATA = [];
 
     const printWhisper = (function() {
+      /*
+      * Hijacks the Output from Whisper.cpp in order to separate the subtitle blocks
+      */
       return function text(args){
           if (arguments.length > 1) args = Array.prototype.slice.call(arguments).join(' ');
           if(args.includes('-->')){
@@ -29,8 +32,22 @@
       };
     })();
 
+    const printWhisperErr = (function(){
+      /*
+      * Hijack the Debug output whisper prints related to the model.
+      */
+      return function text(args){
+        if(args.includes('whisper_print_timings')) {
+          const event = new CustomEvent('whisperFinished', { subs: window.SUB_DATA });
+          window.dispatchEvent(event);
+        }
+        console.log('other hello: ' + args)
+      }
+    })();
+
     var Module = {
-      print: printWhisper
+      print: printWhisper,
+      printErr: printWhisperErr
     }
   </script>
   <body class="flex items-center justify-center h-[100svh]">

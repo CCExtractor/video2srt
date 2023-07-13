@@ -4,6 +4,7 @@
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
   import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
+  import Notifications from "./lib/components/Notifications.svelte";
 
   let audio_data;
   let useWhisper;
@@ -11,8 +12,10 @@
   let whisper_captions;
   let stored_model;
 
+  // Functions 
   let convert_to_srt;
   let convert_to_webvtt;
+  let send_notification;
 
   let video_url;
   let subtitles_URL;
@@ -20,6 +23,7 @@
 
   let SUB_DATA = [];
   let language = "en";
+  let sent_notification = false;
 
   function extract_subs () {
     if(audio_data == undefined) {
@@ -38,7 +42,16 @@
     convert_to_webvtt(SUB_DATA);
   }
   
+  function finishedSubs(e) {
+    if(!sent_notification) {
+      sent_notification = true;
+      console.log('FINISHED!')
+      send_notification();
+    }
+  }
+
   window.addEventListener('newSubsAdded', handleSubs);
+  window.addEventListener('whisperFinished', finishedSubs);
 
 </script>
 
@@ -47,6 +60,7 @@
   <div class="flex flex-row gap-3 pb-3">
   <Model bind:useWhisper={useWhisper} bind:WHISPER_RETURN_DATA={whisper_captions} bind:STORED_MODEL={stored_model}></Model>
   <Languages bind:value={language}></Languages>
+  <Notifications bind:send_notification={send_notification}></Notifications>
   </div>
   {#if stored_model}
     <p style="color:green">Model Ready to use!</p>
