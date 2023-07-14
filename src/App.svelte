@@ -55,19 +55,18 @@
 
 </script>
 
-<main>
-  <span class="block text-5xl text-center w-full py-3">Video 2 SRT</span>
-  <div class="flex flex-row gap-3 pb-3">
+<main class="flex flex-col gap-3 items-center">
+  <span class="block text-6xl pb-4 text-center w-full">Video 2 SRT</span>
+  <div class="flex flex-row gap-3 w-full items-center">
   <Model bind:useWhisper={useWhisper} bind:WHISPER_RETURN_DATA={whisper_captions} bind:STORED_MODEL={stored_model}></Model>
   <Languages bind:value={language}></Languages>
-  <Notifications bind:send_notification={send_notification}></Notifications>
   </div>
   {#if stored_model}
     <p style="color:green">Model Ready to use!</p>
   {/if}
-  <hr>
+  <hr class="w-full">
   <FileHandler bind:audio_data={audio_data} bind:video_url={video_url}></FileHandler>
-  <hr>
+  <hr class="w-full">
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
   <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
     <!-- <div class="radial-progress" style="--value:70;">70%</div> -->
@@ -78,7 +77,7 @@
     {#each SUB_DATA as sub}
       <p>{sub}</p>
     {/each}
-    <p>Full Array: {SUB_DATA}</p>
+    <!-- <p>Full Array: {SUB_DATA}</p> -->
     <video controls width=360 height=360>
       <source src={video_url} type={video_type}/>
       <track label="Output" kind="captions" src={subtitles_URL} default />
@@ -86,6 +85,7 @@
     <WebVtt bind:convert_to_webvtt={convert_to_webvtt} bind:HREF={subtitles_URL}></WebVtt>
     <SRT bind:convert_to_srt={convert_to_srt}></SRT>
   {/if}
+  <Notifications bind:send_notification={send_notification}></Notifications>
 </main>
 
 <style>
