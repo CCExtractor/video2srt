@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    let state:string = "Subscribe to Notifications"
+    let btn:HTMLButtonElement;
     /**
      * Send Notifications when Transcription is complete.
     */
@@ -10,7 +13,14 @@
         */
         Notification.requestPermission().then((result) => {
               console.log(result);
-              HIDE_NOTIFICATION_BUTTON = true;
+              if (result == "granted"){
+                    //   Should only hide when permission granted
+                    HIDE_NOTIFICATION_BUTTON = true;
+              }
+              else if (result == "denied" || Notification.permission == "denied"){
+                state = "Notifications denied"
+                btn.classList.add("btn-error")
+              }
         });
     }
 
@@ -39,8 +49,11 @@
         HIDE_NOTIFICATION_BUTTON = true;
     }
 
+    // Ask for notification as soon as the page is loaded instead of button click
+    // onMount(setup_notifications)
+
 </script>
 
 {#if !HIDE_NOTIFICATION_BUTTON }
-<button on:click={setup_notifications}>Subscribe to Notifications</button>
+<button bind:this={btn}  class="btn btn-outline rounded-md. absolute top-4 right-4" on:click={setup_notifications}>{state}</button>
 {/if}

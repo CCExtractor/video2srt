@@ -62,7 +62,7 @@
     $: value, extract_audio();
 
 </script>
-<div class="flex flex-row gap-3 items-center py-3">
+<div class="flex flex-row gap-3 items-center">
 {#if !executed}
   <input 
     type="file" 

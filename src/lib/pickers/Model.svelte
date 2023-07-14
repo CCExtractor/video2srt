@@ -1,5 +1,7 @@
 <script lang="ts">
     let popup:HTMLDialogElement;
+    let downloadingmodel:boolean = false;
+    let progressCur = 0;
 
     import { 
         REQUEST_FAILED, 
@@ -182,7 +184,7 @@
             const contentLength = data.headers.get('content-length');
             const total = parseInt(contentLength, 10);
             const reader = data.body.getReader();
-
+            downloadingmodel = true;
             let chunks = [];
             let receivedLength = 0;
             let progressLast = -1;
@@ -201,7 +203,7 @@
                 receivedLength += value.length;
 
                 if (contentLength) {
-                    var progressCur = Math.round((receivedLength / total) * 10);
+                    progressCur = Math.round((receivedLength / total) * 100);
                 }
             }
 
@@ -212,7 +214,7 @@
                 chunksAll.set(chunk, position);
                 position += chunk.length;
             }
-
+            
             LoadModelToDB(chunksAll);
 
         }).catch((err: Error) => {
@@ -252,7 +254,8 @@
 
 </script>
 
-<select class="select select-bordered w-full max-w-xs" bind:value>
+{#if !downloadingmodel}
+<select class="select select-bordered w-[60%] max-w-xs" bind:value>
     <option disabled selected>Select Model for Whisper</option>
     <option value="ggml-model-whisper-base.bin">Base</option>
     <option value="ggml-model-whisper-base.en.bin">Base EN</option>
@@ -261,6 +264,11 @@
     <option value="ggml-model-whisper-tiny.bin">Tiny</option>
     <option value="ggml-model-whisper-tiny.en.bin">Tiny EN</option>
 </select>
+{/if}
+
+{#if downloadingmodel}
+<progress class="progress w-[60%]"  value="{progressCur}" max="100"></progress><span>{progressCur}</span>
+{/if}
 
 <dialog bind:this={popup} class="modal">
     <form method="dialog" class="modal-box">
