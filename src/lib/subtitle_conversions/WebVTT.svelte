@@ -1,11 +1,15 @@
-<script lang="ts">
+<script lang="ts" context="module">
+    import { writable } from 'svelte/store';
     const regex = /\[(\d{2}:\d{2}:\d{2})\.(\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2})\.(\d{3})\]/;
 
-    export let HREF = ""
-    let FILENAME = ""
+    export let HREF = writable("")
+    let FILENAME = writable("")
 
-    
     export const convert_to_webvtt = function(sub_array) {
+        /**
+         * Convert Whisper Output to WebVTT
+         * param sub_array: The Subtitles whisper returned
+         */
         let result = 'WEBVTT\n';
         let index = 1;
 
@@ -25,11 +29,19 @@
 
     
     function download(filename, text) {
-        HREF = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
-        FILENAME = filename;
+        HREF.set(`data:text/plain;charset=utf-8,${encodeURIComponent(text)}`)
+        FILENAME.set(filename);
     }
 </script>
 
-<a href={HREF} download={FILENAME}><button class="btn-secondary">
+<script lang="ts">
+    let file_contents = ""
+    let filename = ""
+
+    $: $HREF, file_contents = $HREF
+    $: $FILENAME, filename = $FILENAME
+</script>
+
+<a href={file_contents} download={filename}><button class="btn-secondary">
     Download WebVTT
 </button></a>

@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build && cp _headers dist/_headers",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.2",
@@ -15,19 +17,23 @@
     "@smui/dialog": "^7.0.0-beta.8",
     "@smui/select": "^7.0.0-beta.8",
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
+    "@testing-library/svelte": "^4.0.3",
     "@tsconfig/svelte": "^4.0.1",
+    "@vitest/coverage-v8": "^0.33.0",
     "autoprefixer": "^10.4.14",
     "cypress": "^12.13.0",
     "daisyui": "^3.2.1",
     "dotenv": "^16.3.1",
     "postcss": "^8.4.25",
+    "reflect-metadata": "^0.1.13",
     "svelte": "^3.58.0",
     "svelte-check": "^3.3.1",
     "tailwindcss": "^3.3.2",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
-    "vite-plugin-cross-origin-isolation": "^0.1.6"
+    "vite-plugin-cross-origin-isolation": "^0.1.6",
+    "vitest": "^0.33.0"
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.11.6",

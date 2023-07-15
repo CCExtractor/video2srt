@@ -3,6 +3,8 @@
   import Model from "./lib/pickers/Model.svelte";
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
+  import {convert_to_srt} from "./lib/subtitle_conversions/SRT.svelte";
+  import {convert_to_webvtt, HREF} from "./lib/subtitle_conversions/WebVTT.svelte";
   import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
   import Notifications from "./lib/components/Notifications.svelte";
 
@@ -13,9 +15,7 @@
   let stored_model;
   let threads = 16;
 
-  // Functions
-  let convert_to_srt;
-  let convert_to_webvtt;
+  // Functions 
   let send_notification;
 
   let video_url;
@@ -25,6 +25,8 @@
   let SUB_DATA = [];
   let language = "en";
   let sent_notification = false;
+
+  //let convert_to_srt;
 
   function extract_subs() {
     if (audio_data == undefined) {
@@ -41,6 +43,7 @@
     console.log(SUB_DATA);
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
+    subtitles_URL = HREF;
   }
 
   function finishedSubs(e) {
@@ -104,8 +107,8 @@
       <source src={video_url} type={video_type} />
       <track label="Output" kind="captions" src={subtitles_URL} default />
     </video>
-    <WebVtt bind:convert_to_webvtt bind:HREF={subtitles_URL} />
-    <SRT bind:convert_to_srt />
+    <WebVtt></WebVtt>
+    <SRT></SRT>
   {/if}
   <Notifications bind:send_notification />
 </main>
