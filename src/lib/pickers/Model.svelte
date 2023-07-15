@@ -16,6 +16,7 @@
     import { MODEL_TO_SIZE } from './file_sizes.js';
 
 
+    export let threads = 16;
     // Values for the UI
     export let value = undefined;
     export let WHISPER_RETURN_DATA = undefined;
@@ -244,7 +245,7 @@
         }
 
         WHISPER_RETURN_DATA = "loading";
-        WHISPER_RETURN_DATA = Module.full_default(model, audio, lang, '16', false);
+        WHISPER_RETURN_DATA = Module.full_default(model, audio, lang, `${threads}`, false);
 
         
         console.log(WHISPER_RETURN_DATA);
@@ -255,7 +256,7 @@
 </script>
 
 {#if !downloadingmodel}
-<select class="select select-bordered w-[60%] max-w-xs" bind:value>
+<select class="select select-bordered w-[60%]" bind:value>
     <option disabled selected>Select Model for Whisper</option>
     <option value="ggml-model-whisper-base.bin">Base</option>
     <option value="ggml-model-whisper-base.en.bin">Base EN</option>
@@ -285,3 +286,4 @@
       </div>
     </form>
 </dialog>
+
