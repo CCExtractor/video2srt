@@ -11,8 +11,9 @@
   let whisper_text;
   let whisper_captions;
   let stored_model;
+  let threads = 16;
 
-  // Functions 
+  // Functions
   let convert_to_srt;
   let convert_to_webvtt;
   let send_notification;
@@ -25,15 +26,15 @@
   let language = "en";
   let sent_notification = false;
 
-  function extract_subs () {
-    if(audio_data == undefined) {
+  function extract_subs() {
+    if (audio_data == undefined) {
       return;
     }
-    console.log(audio_data)
-    useWhisper(audio_data, language)
+    console.log(audio_data);
+    useWhisper(audio_data, language);
   }
 
-  $: audio_data, extract_subs()
+  $: audio_data, extract_subs();
 
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
@@ -41,53 +42,73 @@
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
   }
-  
+
   function finishedSubs(e) {
-    if(!sent_notification) {
+    if (!sent_notification) {
       sent_notification = true;
-      console.log('FINISHED!')
+      console.log("FINISHED!");
       send_notification();
     }
   }
 
-  window.addEventListener('newSubsAdded', handleSubs);
-  window.addEventListener('whisperFinished', finishedSubs);
-
+  window.addEventListener("newSubsAdded", handleSubs);
+  window.addEventListener("whisperFinished", finishedSubs);
 </script>
 
 <main class="flex flex-col gap-3 items-center">
   <span class="block text-6xl pb-4 text-center w-full">Video 2 SRT</span>
   <div class="flex flex-row gap-3 w-full items-center">
-  <Model bind:useWhisper={useWhisper} bind:WHISPER_RETURN_DATA={whisper_captions} bind:STORED_MODEL={stored_model}></Model>
-  <Languages bind:value={language}></Languages>
+    <Model
+      bind:useWhisper
+      bind:WHISPER_RETURN_DATA={whisper_captions}
+      bind:STORED_MODEL={stored_model}
+      {threads}
+    />
+    <Languages bind:value={language} />
   </div>
   {#if stored_model}
     <p style="color:green">Model Ready to use!</p>
   {/if}
-  <hr class="w-full">
-  <FileHandler bind:audio_data={audio_data} bind:video_url={video_url}></FileHandler>
-  <hr class="w-full">
+  <hr class="w-full" />
+  <FileHandler bind:audio_data bind:video_url />
+  <hr class="w-full" />
+  <div class="flex flex-row gap-3 w-full items-center">
+    <input
+      type="range"
+      min="1"
+      max="16"
+      bind:value={threads}
+      class="range w-[70%] range-sm"
+      step="1"
+    />
+    <div
+      class="tooltip w-[30%]"
+      data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine"
+    >
+      Threads in use: {threads}
+    </div>
+  </div>
+
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
-  <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
+    <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
     <!-- <div class="radial-progress" style="--value:70;">70%</div> -->
     <p>Loading... Depending on the audio length it may take time</p>
     {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}
-  <h5>You will see progress in realtime</h5>
+    <h5>You will see progress in realtime</h5>
     {#each SUB_DATA as sub}
       <p>{sub}</p>
     {/each}
     <!-- <p>Full Array: {SUB_DATA}</p> -->
-    <video controls width=360 height=360>
-      <source src={video_url} type={video_type}/>
+    <video controls width="360" height="360">
+      <source src={video_url} type={video_type} />
       <track label="Output" kind="captions" src={subtitles_URL} default />
     </video>
-    <WebVtt bind:convert_to_webvtt={convert_to_webvtt} bind:HREF={subtitles_URL}></WebVtt>
-    <SRT bind:convert_to_srt={convert_to_srt}></SRT>
+    <WebVtt bind:convert_to_webvtt bind:HREF={subtitles_URL} />
+    <SRT bind:convert_to_srt />
   {/if}
-  <Notifications bind:send_notification={send_notification}></Notifications>
+  <Notifications bind:send_notification />
 </main>
 
 <style>
-
 </style>
