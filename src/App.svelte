@@ -38,7 +38,7 @@
   }
 
   function activateButton(){
-    if (audio_data != undefined && language != undefined && stored_model != undefined){
+    if (audio_data != undefined && language != undefined && stored_model != false){
       convert_button.classList.replace("btn-disabled","btn-sucess");
     }
     else{
@@ -47,6 +47,8 @@
   }
 
   $: audio_data,activateButton()
+  $: stored_model,activateButton()
+  $: language,activateButton()
 
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
