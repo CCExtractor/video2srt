@@ -13,6 +13,7 @@
   let whisper_text;
   let whisper_captions;
   let stored_model;
+  let convert_button:HTMLButtonElement;
   let threads = 16;
 
   // Functions 
@@ -36,7 +37,16 @@
     useWhisper(audio_data, language);
   }
 
-  $: audio_data, extract_subs();
+  function activateButton(){
+    if (audio_data != undefined && language != undefined && stored_model != undefined){
+      convert_button.classList.replace("btn-disabled","btn-sucess");
+    }
+    else{
+      //nothing
+    }
+  }
+
+  $: audio_data,activateButton()
 
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
@@ -91,7 +101,7 @@
       Threads in use: {threads}
     </div>
   </div>
-
+  <button class="btn btn-disabled w-1/2" bind:this={convert_button} on:click={extract_subs}>Convert</button>
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
     <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
     <!-- <div class="radial-progress" style="--value:70;">70%</div> -->
@@ -99,7 +109,7 @@
     {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}
     <h5>You will see progress in realtime</h5>
-    {#each SUB_DATA as sub}
+    {#each SUB_DATA as sub} 
       <p>{sub}</p>
     {/each}
     <!-- <p>Full Array: {SUB_DATA}</p> -->

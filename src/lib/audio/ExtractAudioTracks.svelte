@@ -90,7 +90,7 @@
 </script>
 
 {#if started}
-    <div class="radial-progress" bind:this={ProgressMeter} style="--value:0">{progress}%</div>
+    <div class="radial-progress" bind:this={ProgressMeter} style="--value:0">{progress.toFixed(2)}%</div>
     {/if}
 
 {#if show_audio}
