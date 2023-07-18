@@ -1,7 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    let state:string = "Subscribe to Notifications"
-    let btn:HTMLButtonElement;
     /**
      * Send Notifications when Transcription is complete.
     */
@@ -13,21 +10,15 @@
         */
         Notification.requestPermission().then((result) => {
               console.log(result);
-              if (result == "granted"){
-                    //   Should only hide when permission granted
-                    HIDE_NOTIFICATION_BUTTON = true;
-              }
-              else if (result == "denied" || Notification.permission == "denied"){
-                state = "Notifications denied"
-                btn.classList.add("btn-error")
-              }
+              HIDE_NOTIFICATION_BUTTON = true;
         });
     }
 
     export const send_notification = function() {
         const text = `Video has been transcribed!`;
         const notification = new Notification("Video2Srt", { body: text });
-        
+        console.log(notification)
+
         document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") {
                 // The tab has become visible so clear the now-stale Notification.
@@ -49,11 +40,8 @@
         HIDE_NOTIFICATION_BUTTON = true;
     }
 
-    // Ask for notification as soon as the page is loaded instead of button click
-    // onMount(setup_notifications)
-
 </script>
 
 {#if !HIDE_NOTIFICATION_BUTTON }
-<button bind:this={btn}  class="btn btn-outline rounded-md. absolute top-4 right-4" on:click={setup_notifications}>{state}</button>
+<button on:click={setup_notifications}>Subscribe to Notifications</button>
 {/if}

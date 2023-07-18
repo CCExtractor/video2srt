@@ -55,7 +55,7 @@
     console.log(SUB_DATA);
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
-    subtitles_URL = HREF;
+
   }
 
   function finishedSubs(e) {
@@ -65,6 +65,10 @@
       send_notification();
     }
   }
+
+  HREF.subscribe((value) => {
+    subtitles_URL = value;
+  })
 
   window.addEventListener("newSubsAdded", handleSubs);
   window.addEventListener("whisperFinished", finishedSubs);
