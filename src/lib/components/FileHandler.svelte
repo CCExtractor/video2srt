@@ -5,7 +5,7 @@
 
     import ExtractAudioTracks from "../audio/ExtractAudioTracks.svelte";
     import FindAudioTracks from "../audio/FindAudioTracks.svelte";
-    import Model from '../pickers/Model.svelte';
+    import {NO_AUDIO_TRACK} from './errors.js'
 
     let files: FileList;
     let audio_tracks;
@@ -36,6 +36,14 @@
                 track_data = data;
                 console.log(track_data)
                 executed = true;
+
+                if (track_data.length == 1) {
+                    value = track_data[0]['index']
+                }
+
+                if (track_data.length == 0) {
+                    alert(NO_AUDIO_TRACK)
+                }
             }).catch((err: Error) => {
                 alert(err)
             });
@@ -75,7 +83,6 @@
   <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data  }></ExtractAudioTracks>
 
 {#if !hide_tracks}
-
     <select bind:value class="select select-bordered">
     <option selected disabled>Select Audio Track</option>
     {#each track_data as track}
