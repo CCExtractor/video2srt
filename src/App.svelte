@@ -73,10 +73,9 @@
   window.addEventListener("newSubsAdded", handleSubs);
   window.addEventListener("whisperFinished", finishedSubs);
 </script>
-
 <main class="flex flex-col gap-3 items-center">
   <span class="block text-6xl pb-4 text-center w-full">Video 2 SRT</span>
-  <div class="flex flex-row gap-3 w-full items-center">
+  <div class="flex flex-col md:flex-row gap-3 w-full items-center">
     <Model
       bind:useWhisper
       bind:WHISPER_RETURN_DATA={whisper_captions}
@@ -91,35 +90,35 @@
   <hr class="w-full" />
   <FileHandler bind:audio_data bind:video_url />
   <hr class="w-full" />
-  <div class="flex flex-row gap-3 w-full items-center">
+  <div class="flex flex-col md:flex-row gap-3 w-full items-center">
     <input
       type="range"
       min="1"
       max="16"
       bind:value={threads}
-      class="range w-[70%] range-sm"
+      class="range w-full md:w-[70%] range-sm"
       step="1"
     />
     <div
-      class="tooltip w-[30%]"
+      class="tooltip w-full md:w-[30%]"
       data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine"
     >
       Threads in use: {threads}
     </div>
   </div>
-  <button class="btn btn-disabled w-1/2" bind:this={convert_button} on:click={extract_subs}>Convert</button>
+
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
-    <!-- arbitary values currently you can update this with the real variables recieved from svelte store  -->
+    <!-- arbitary values currently you can update this with the real variables received from svelte store  -->
     <!-- <div class="radial-progress" style="--value:70;">70%</div> -->
     <p>Loading... Depending on the audio length it may take time</p>
     {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}
-    <h5>You will see progress in realtime</h5>
-    {#each SUB_DATA as sub} 
+    <h5>You will see progress in real-time</h5>
+    {#each SUB_DATA as sub}
       <p>{sub}</p>
     {/each}
     <!-- <p>Full Array: {SUB_DATA}</p> -->
-    <video controls width="360" height="360">
+    <video controls width="100%" height="360">
       <source src={video_url} type={video_type} />
       <track label="Output" kind="captions" src={subtitles_URL} default />
     </video>
@@ -130,4 +129,13 @@
 </main>
 
 <style>
+  /* Responsive Styles */
+  @media (min-width: 768px) {
+    .flex-row {
+      flex-direction: row;
+    }
+    .w-full {
+      width: 100%;
+    }
+  }
 </style>
