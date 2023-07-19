@@ -131,6 +131,7 @@
                 let db = event.target.result
                 let transaction = db.transaction(['models'], 'readwrite')
                 let store = transaction.objectStore('models')
+                
 
                 let request = undefined;
                 try {
@@ -141,8 +142,8 @@
                 }
 
                 request.onsuccess = function (event) {
+                    storeFS(data)
                     console.log("STORED MODEL!")
-                    storeFS(connection.result)
                 }
 
                 request.onerror = function (error) {
