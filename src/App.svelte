@@ -74,9 +74,8 @@
   window.addEventListener("whisperFinished", finishedSubs);
 </script>
 
-
+<span class="block text-6xl pb-4 left-0 top-0 w-full">Video 2 SRT</span>
 <main class="flex flex-col gap-3 items-center">
-  <span class="block text-6xl pb-4 text-center w-full">Video 2 SRT</span>
   <div class="flex flex-col md:flex-row gap-3 w-full items-center">
     <Model
       bind:useWhisper
@@ -126,6 +125,7 @@
   {/if}
   <Notifications bind:send_notification />
 </main>
+<span id="forkongithub"><a href={import.meta.env.VITE_GITHUB_URL}>Fork me on GitHub</a></span>
 
 <style>
   /* Responsive Styles */
@@ -141,4 +141,6 @@
     opacity: 0.5;
     pointer-events: none;
   }
+
+  #forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:fixed;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}
 </style>
