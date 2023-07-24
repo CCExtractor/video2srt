@@ -92,6 +92,7 @@
   <FileHandler bind:audio_data bind:video_url class="w-full" />
   <hr class="w-full" />
   <div class="flex flex-col md:flex-row gap-3 w-full items-center">
+    <label for="stepper">Number of Threads</label>
     <input
       type="range"
       min="1"
@@ -99,6 +100,7 @@
       bind:value={threads}
       class="range w-full md:w-[70%] range-sm"
       step="1"
+      id="stepper"
     />
     <div
       class="tooltip w-full md:w-[30%]"

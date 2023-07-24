@@ -72,10 +72,12 @@
 </script>
 <div class="flex flex-row gap-3 items-center">
 {#if !executed}
+  <label for="attachment">File</label>
   <input 
     type="file" 
     accept="video/*, audio/*"
     bind:files
+    id="attachment"
   />
 {/if}
 
