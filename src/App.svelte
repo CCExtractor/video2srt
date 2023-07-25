@@ -3,8 +3,11 @@
   import Model from "./lib/pickers/Model.svelte";
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
-  import {convert_to_srt} from "./lib/subtitle_conversions/SRT.svelte";
-  import {convert_to_webvtt, HREF} from "./lib/subtitle_conversions/WebVTT.svelte";
+  import { convert_to_srt } from "./lib/subtitle_conversions/SRT.svelte";
+  import {
+    convert_to_webvtt,
+    HREF,
+  } from "./lib/subtitle_conversions/WebVTT.svelte";
   import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
   import Notifications from "./lib/components/Notifications.svelte";
 
@@ -13,10 +16,10 @@
   let whisper_text;
   let whisper_captions;
   let stored_model;
-  let convert_button:HTMLButtonElement;
+  let convert_button: HTMLButtonElement;
   let threads = 16;
 
-  // Functions 
+  // Functions
   let send_notification;
 
   let video_url;
@@ -37,25 +40,27 @@
     useWhisper(audio_data, language);
   }
 
-  function activateButton(){
-    if (audio_data != undefined && language != undefined && stored_model != false){
-      convert_button.classList.replace("btn-disabled","btn-sucess");
-    }
-    else{
+  function activateButton() {
+    if (
+      audio_data != undefined &&
+      language != undefined &&
+      stored_model != false
+    ) {
+      convert_button.classList.replace("btn-disabled", "btn-sucess");
+    } else {
       //nothing
     }
   }
 
-  $: audio_data,activateButton()
-  $: stored_model,activateButton()
-  $: language,activateButton()
+  $: audio_data, activateButton();
+  $: stored_model, activateButton();
+  $: language, activateButton();
 
   function handleSubs(e) {
     SUB_DATA = window.SUB_DATA;
     console.log(SUB_DATA);
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
-
   }
 
   function finishedSubs(e) {
@@ -68,13 +73,13 @@
 
   HREF.subscribe((value) => {
     subtitles_URL = value;
-  })
+  });
 
   window.addEventListener("newSubsAdded", handleSubs);
   window.addEventListener("whisperFinished", finishedSubs);
 </script>
 
-<span class="block text-6xl pb-4 left-0 top-0 w-full">Video 2 SRT</span>
+<span class="flex justify-center font-bold text-5xl pb-10 w-full">Video 2 SRT</span>
 <main class="flex flex-col gap-3 items-center">
   <div class="flex flex-col md:flex-row gap-3 w-full items-center">
     <Model
@@ -92,7 +97,6 @@
   <FileHandler bind:audio_data bind:video_url class="w-full" />
   <hr class="w-full" />
   <div class="flex flex-col md:flex-row gap-3 w-full items-center">
-    <label for="stepper">Number of Threads</label>
     <input
       type="range"
       min="1"
@@ -102,14 +106,13 @@
       step="1"
       id="stepper"
     />
-    <div
-      class="tooltip w-full md:w-[30%]"
-      data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine"
-    >
-      Threads in use: {threads}
-    </div>
+    <label for="stepper" class="tooltip w-full md:w-[30%] text-lg" data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine">Threads in use: {threads} </label>
   </div>
-  <button class="btn btn-disabled w-full md:w-1/2" bind:this={convert_button} on:click={extract_subs}>Convert</button>
+  <button
+    class="btn btn-disabled w-full md:w-1/2"
+    bind:this={convert_button}
+    on:click={extract_subs}>Convert</button
+  >
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
     <p>Loading... Depending on the audio length, it may take time</p>
     {whisper_captions}
@@ -122,27 +125,68 @@
       <source src={video_url} type={video_type} />
       <track label="Output" kind="captions" src={subtitles_URL} default />
     </video>
-    <WebVtt></WebVtt>
-    <SRT></SRT>
+    <WebVtt />
+    <SRT />
   {/if}
   <Notifications bind:send_notification />
 </main>
-<span id="forkongithub"><a href={import.meta.env.VITE_GITHUB_URL}>Fork me on GitHub</a></span>
+<span class="forkongithub"
+  ><a href={import.meta.env.VITE_GITHUB_URL}>Fork me on GitHub</a></span
+>
 
 <style>
-  /* Responsive Styles */
-  @media (min-width: 768px) {
-    .md\:flex-row {
-      flex-direction: row;
-    }
-    .md\:w-1\/2 {
-      width: 50%;
-    }
+  .forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial, sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 1rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
   }
-  .btn-disabled {
-    opacity: 0.5;
-    pointer-events: none;
+  .forkongithub a:hover {
+    background: #c11;
+    color: #fff;
   }
-
-  #forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:fixed;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}
+  .forkongithub a::before,
+  .forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+  }
+  .forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+  }
+      .forkongithub {
+      position: fixed;
+      display: block;
+      top: 0;
+      right: 0;
+      width: 200px;
+      overflow: hidden;
+      height: 200px;
+      z-index: 9999;
+    }
+    .forkongithub a {
+      width: 200px;
+      position: absolute;
+      top: 12px;
+      right: -55px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+    }
 </style>
