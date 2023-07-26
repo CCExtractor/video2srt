@@ -1,16 +1,26 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
     /**
      * Send Notifications when Transcription is complete.
     */
     let HIDE_NOTIFICATION_BUTTON = false;
+    let State = "Subscribe to Notifications";
+    let btn:HTMLButtonElement;
 
     const setup_notifications = function() {
         /*
         * Asks the user to enable notifications
         */
         Notification.requestPermission().then((result) => {
-              console.log(result);
-              HIDE_NOTIFICATION_BUTTON = true;
+            // Hide the button if they have granted us permission 
+            if (result == "granted") {
+                HIDE_NOTIFICATION_BUTTON = true;
+            }
+            else if (result == "denied"){
+                State = "Notifications denied"
+                btn.classList.add("btn-error")
+            }
         });
     }
 
@@ -33,15 +43,21 @@
     if (!("Notification" in window)) {
         HIDE_NOTIFICATION_BUTTON = true;
         console.log("This browser does not support notifications.");
-    } 
-
-    // Hide the button if they have granted us permission 
-    if (Notification.permission == "granted") {
-        HIDE_NOTIFICATION_BUTTON = true;
     }
+
+    function permissions_changed(){
+        // Hide the button if they have granted us permission 
+        if (Notification.permission == "granted") {
+            HIDE_NOTIFICATION_BUTTON = true;
+        }
+        else if (Notification.permission == "denied"){
+            State = "Notifications denied"
+        }
+    }
+    $: Notification.permission,permissions_changed();
 
 </script>
 
 {#if !HIDE_NOTIFICATION_BUTTON }
-<button on:click={setup_notifications}>Subscribe to Notifications</button>
+<button bind:this={btn} on:click={setup_notifications} class="btn btn-outline rounded-md. absolute top-4 left-4">{State}</button>
 {/if}
