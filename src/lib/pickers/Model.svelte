@@ -10,7 +10,9 @@
         CANNOT_RETRIEVE_DATA,
         INDEXDB_BLOCKED,
         INDEXDB_ABORT,
-        FAILED_TO_STORE_IN_DB
+        FAILED_TO_STORE_IN_DB,
+        FAILED_QUERYING_MODELS
+
     } from './errors.js';
 
     import { MODEL_TO_SIZE } from './file_sizes.js';
@@ -22,6 +24,17 @@
     export let WHISPER_RETURN_DATA = undefined;
     export let STORED_MODEL = false;
 
+
+    // Available Models
+    const available_models = {
+        "ggml-model-whisper-base.bin": "Base",
+        "ggml-model-whisper-base.en.bin": "Base EN",
+        "ggml-model-whisper-small.bin": "Small",
+        "ggml-model-whisper-small.en.bin": "Small EN",
+        "ggml-model-whisper-tiny.bin": "Tiny",
+        "ggml-model-whisper-tiny.en.bin": "Tiny EN"
+    }
+    let BUILT_MENU = false;
 
     // Values for the Database
     const DB_NAME = "WHISPER_TRANSCRIBE";
@@ -124,7 +137,7 @@
             // A Transaction was aborted
             connection.onabort = function(error) {
                 console.error(error);
-                throw new Error()
+                throw new Error(INDEXDB_ABORT)
             }
 
             connection.onsuccess = function (event) {
@@ -144,6 +157,10 @@
                 request.onsuccess = function (event) {
                     storeFS(data)
                     console.log("STORED MODEL!")
+
+                    // Update Menu
+                    BUILT_MENU = false;
+                    build_menu()
                 }
 
                 request.onerror = function (error) {
@@ -252,19 +269,87 @@
         console.log(WHISPER_RETURN_DATA);
     }
 
+    function build_menu() {
+        /**
+         * This function aims to retrieve all models so we can show the user
+         * which models they have and which not
+        */
+        if (BUILT_MENU) {
+            return;
+        } else {
+            BUILT_MENU = true
+        }
+
+        let connection = indexedDB.open(DB_NAME, DB_VERSION)
+        let RETURN_MODELS = ["test"]
+
+        // Something Went Wrong
+        connection.onerror = function(error) {
+            console.error(error);
+            throw new Error(CANNOT_ACCESS_INDEXDB)
+        }
+
+        // An Error connecting to the database
+        connection.onblocked = function(error) {
+            console.error(error);
+            throw new Error(INDEXDB_BLOCKED)
+        }
+
+        // A Transaction was aborted
+        connection.onabort = function(error) {
+            console.error(error);
+            throw new Error(INDEXDB_ABORT)
+        }
+
+        // We have established connection to IndexDB
+        connection.onsuccess = function (event) {
+            let db = event.target.result
+            let transaction = db.transaction(['models'], 'readonly')
+            let store = transaction.objectStore('models')
+
+            // Fetch All Entries
+            let request = store.openCursor();
+            request.onerror = function(event) {
+                console.error(`Failed Fetching Data: ${event}`);
+                throw new Error(FAILED_QUERYING_MODELS)
+            };
+
+            request.onsuccess = function(event2) {
+                let cursor = event2.target.result;
+                
+                if (cursor) {
+                    // Append a Check Mark to all downloaded objects!
+                    let key = cursor.primaryKey;
+                    let value = cursor.value;
+
+                    available_models[key] = `${available_models[key]} ✅`
+
+                    console.log(key, value);
+                    cursor.continue();
+                }
+            };
+
+            Object.keys(available_models).forEach((elem) => {
+                available_models[elem] = `${available_models[elem]}`
+            })
+        }
+    }
+
     $: value, loadModel();
 
+    // Build Once
+    build_menu()
 </script>
 
 {#if !downloadingmodel}
 <select class="select select-bordered w-[60%]" bind:value>
     <option disabled selected>Select Model for Whisper</option>
-    <option value="ggml-model-whisper-base.bin">Base</option>
-    <option value="ggml-model-whisper-base.en.bin">Base EN</option>
-    <option value="ggml-model-whisper-small.bin">Small</option>
-    <option value="ggml-model-whisper-small.en.bin">Small EN</option>
-    <option value="ggml-model-whisper-tiny.bin">Tiny</option>
-    <option value="ggml-model-whisper-tiny.en.bin">Tiny EN</option>
+    {#each Object.keys(available_models) as elem}
+        <!--- Idk how this one shows up tbh. -->
+        {#if elem != "src/models/ggml-model-whisper-tiny.en.bin"}
+            <option value={elem}>{available_models[elem]}</option>
+        {/if}
+    {/each}
 </select>
 {/if}
 

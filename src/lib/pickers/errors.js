@@ -26,3 +26,7 @@ Failed to Access IndexDB: Aborted
 export const FAILED_TO_STORE_IN_DB = `
 Failed to put model in DB! 
 `
+
+export const FAILED_QUERYING_MODELS = `
+
+`

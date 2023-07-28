@@ -7,6 +7,24 @@
     <title>Video2Srt</title>
     <link rel="manifest" href="/manifest.json">
 
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Video2SRT - Generate subtitles for your video files privately on your device" />
+    <meta name="description" content="Video2SRT uses machine learning to generate subtitle files for your video files all on your own machine without needing an internet connection" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" name="url" content="https://video2srt.ccextractor.org" />
+    <meta property="og:title" content="Video2SRT - Generate subtitles for your video files privately on your device" />
+    <meta property="og:description" content="Video2SRT uses machine learning to generate subtitle files for your video files all on your own machine without needing an internet connection" />
+    <meta property="og:image" name="image" content="https://video2srt.ccextractor.org/images/icons/icon-512x512.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" name="url" content="https://video2srt.ccextractor.org" />
+    <meta property="twitter:title" content="Video2SRT - Generate subtitles for your video files privately on your device" />
+    <meta property="twitter:description" content="Video2SRT uses machine learning to generate subtitle files for your video files all on your own machine without needing an internet connection" />
+    <meta property="twitter:image" name="image" content="https://video2srt.ccextractor.org/images/icons/icon-512x512.png" />
+
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script> -->
   </head>
   <script>
@@ -49,6 +67,17 @@
       print: printWhisper,
       printErr: printWhisperErr
     }
+
+    // Sets all the URL's to the current URL
+    // AUTHORS NOTE: I could not get this to work. When scrapers fetch this, the JS Code doesn't execute obviously. 
+    document.querySelectorAll('meta[name="url"]').forEach((elem) =>{
+      elem.setAttribute("content", window.location.href);
+    }) 
+
+    // Sets all the URL's to the logo ATM
+    document.querySelectorAll('meta[name="image"]').forEach((elem) =>{
+      elem.setAttribute("content", window.location.href + 'images/icons/icon-512x512.png');
+    }) 
   </script>
   <body class="flex items-center justify-center min-h-screen">
     <div id="app"></div>
