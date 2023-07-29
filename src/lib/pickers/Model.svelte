@@ -160,7 +160,7 @@
 
                     // Update Menu
                     BUILT_MENU = false;
-                    build_menu()
+                    //build_menu()
                 }
 
                 request.onerror = function (error) {
@@ -338,7 +338,7 @@
     $: value, loadModel();
 
     // Build Once
-    build_menu()
+    // build_menu()
 </script>
 
 {#if !downloadingmodel}
