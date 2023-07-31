@@ -6,6 +6,7 @@
     import ExtractAudioTracks from "../audio/ExtractAudioTracks.svelte";
     import FindAudioTracks from "../audio/FindAudioTracks.svelte";
     import {NO_AUDIO_TRACK} from './errors.js'
+    import {INVALID_FILE} from '../audio/errors';
 
     let files: FileList;
     let audio_tracks;
@@ -45,7 +46,13 @@
                     alert(NO_AUDIO_TRACK)
                 }
             }).catch((err: Error) => {
-                alert(err)
+                console.log(err.message)
+                console.log(NO_AUDIO_TRACK)
+                if (err.message == INVALID_FILE) {
+                    alert(err) 
+                    files = null
+                    executed = false;
+                }
             });
             executed = true;
         }
