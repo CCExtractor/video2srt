@@ -21,7 +21,7 @@
             fileInfo = await worker.getFileInfo(file);
             console.log(fileInfo);
         } catch (e) {
-            if (e.message.includes('index out of bounds')){
+            if (e.message.includes('out of bounds')){
                 // Reproduced this error by submitting images, and other type of files
                 throw new Error(INVALID_FILE);
             }

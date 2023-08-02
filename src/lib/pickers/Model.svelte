@@ -88,8 +88,11 @@
                 let os = db.createObjectStore('models', {autoIncrement: true});
             } else {
                 let os = event.currentTarget.transaction.objectStore('models')
+                os.clear();
             }
         }
+
+        build_menu()
 
         // We have Succesfully connected to the database
         connection.onsuccess = function(event) {
@@ -140,12 +143,15 @@
                 throw new Error(INDEXDB_ABORT)
             }
 
+            connection.onupgradeneeded = function(err) {
+                console.log("CALLED")
+            }
+
             connection.onsuccess = function (event) {
                 let db = event.target.result
                 let transaction = db.transaction(['models'], 'readwrite')
                 let store = transaction.objectStore('models')
                 
-
                 let request = undefined;
                 try {
                     request = store.put(data, value);
@@ -160,7 +166,7 @@
 
                     // Update Menu
                     BUILT_MENU = false;
-                    build_menu()
+                    //build_menu()
                 }
 
                 request.onerror = function (error) {
@@ -281,7 +287,6 @@
         }
 
         let connection = indexedDB.open(DB_NAME, DB_VERSION)
-        let RETURN_MODELS = ["test"]
 
         // Something Went Wrong
         connection.onerror = function(error) {
@@ -304,7 +309,12 @@
         // We have established connection to IndexDB
         connection.onsuccess = function (event) {
             let db = event.target.result
-            let transaction = db.transaction(['models'], 'readonly')
+            let transaction;
+            try {
+                transaction = db.transaction(['models'], 'readonly') 
+            } catch (err) {
+                return;
+            }
             let store = transaction.objectStore('models')
 
             // Fetch All Entries
@@ -332,13 +342,13 @@
             Object.keys(available_models).forEach((elem) => {
                 available_models[elem] = `${available_models[elem]}`
             })
+            db.close();
         }
     }
 
     $: value, loadModel();
 
     // Build Once
-    build_menu()
 </script>
 
 {#if !downloadingmodel}
