@@ -41,6 +41,8 @@
     const DB_VERSION = 1;
 
     const WHISPER_FILE_NAME = "whisper.bin";
+    
+    let CANCEL_DOWNLOAD = false;
 
     let MODEL_TITLE = "Download Model?";
 
@@ -216,6 +218,13 @@
             let completed = false
 
             while (!completed) {
+
+                if (CANCEL_DOWNLOAD){
+                    downloadingmodel = false;
+                    reader.cancel()
+                    break
+                }
+
                 const { done, value } = await reader.read();
 
                 completed = done;
@@ -232,15 +241,20 @@
                 }
             }
 
-            let position = 0;
-            let chunksAll = new Uint8Array(receivedLength);
+            if (!CANCEL_DOWNLOAD){
+                let position = 0;
+                let chunksAll = new Uint8Array(receivedLength);
 
-            for (var chunk of chunks) {
-                chunksAll.set(chunk, position);
-                position += chunk.length;
+                for (var chunk of chunks) {
+                    chunksAll.set(chunk, position);
+                    position += chunk.length;
+                }
+                
+                LoadModelToDB(chunksAll);
             }
-            
-            LoadModelToDB(chunksAll);
+            else{
+                CANCEL_DOWNLOAD = false;
+            }
 
         }).catch((err: Error) => {
             console.error(err)
@@ -364,7 +378,7 @@
 {/if}
 
 {#if downloadingmodel}
-<progress class="progress w-[60%]"  value="{progressCur}" max="100"></progress><span>{progressCur}</span>
+<progress class="progress w-[60%]"  value="{progressCur}" max="100"></progress><span>{progressCur}%</span><button class="btn btn-square btn-sm btn-outline btn-error" on:click={()=>{CANCEL_DOWNLOAD=true}}>X</button>
 {/if}
 
 <dialog bind:this={popup} class="modal">
