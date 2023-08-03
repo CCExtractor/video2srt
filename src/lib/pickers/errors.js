@@ -28,5 +28,9 @@ Failed to put model in DB!
 `
 
 export const FAILED_QUERYING_MODELS = `
+Failed to query Models.
+`
 
+export const FAILED_DELETING_DB = `
+There was an error deleting all the models
 `

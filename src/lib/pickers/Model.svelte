@@ -11,7 +11,8 @@
         INDEXDB_BLOCKED,
         INDEXDB_ABORT,
         FAILED_TO_STORE_IN_DB,
-        FAILED_QUERYING_MODELS
+        FAILED_QUERYING_MODELS,
+        FAILED_DELETING_DB
 
     } from './errors.js';
 
@@ -26,7 +27,7 @@
 
 
     // Available Models
-    const available_models = {
+    const original_models = {
         "ggml-model-whisper-base.bin": "Base",
         "ggml-model-whisper-base.en.bin": "Base EN",
         "ggml-model-whisper-small.bin": "Small",
@@ -34,6 +35,7 @@
         "ggml-model-whisper-tiny.bin": "Tiny",
         "ggml-model-whisper-tiny.en.bin": "Tiny EN"
     }
+    let available_models = Object.assign({}, original_models);
     let BUILT_MENU = false;
 
     // Values for the Database
@@ -168,7 +170,7 @@
 
                     // Update Menu
                     BUILT_MENU = false;
-                    //build_menu()
+                    build_menu()
                 }
 
                 request.onerror = function (error) {
@@ -300,6 +302,7 @@
             BUILT_MENU = true
         }
 
+        available_models = original_models;
         let connection = indexedDB.open(DB_NAME, DB_VERSION)
 
         // Something Went Wrong
@@ -340,7 +343,6 @@
 
             request.onsuccess = function(event2) {
                 let cursor = event2.target.result;
-                
                 if (cursor) {
                     // Append a Check Mark to all downloaded objects!
                     let key = cursor.primaryKey;
@@ -360,9 +362,45 @@
         }
     }
 
-    $: value, loadModel();
+    const deleteDatabase = function() {
+        /**
+         * Drops all models by deleting the model
+        */
+        let connection = indexedDB.open(DB_NAME, DB_VERSION);
+        connection.onsuccess = function(event) {
+            let db = event.target.result
+            let transaction;
 
-    // Build Once
+            try {
+                transaction = db.transaction(['models'], 'readwrite') 
+            } catch (err) {
+                return;
+            }
+
+            let store = transaction.objectStore('models').clear()
+
+            store.onsuccess = function(event2) {
+                db.close();
+                
+                // Authors Note: When executing this
+                // the object original_model also gets changed
+                // If Deep Copying doesn't work what edits that object?
+
+                //BUILT_MENU = false;
+                //build_menu()
+
+                location.reload()
+                alert("Models have been deleted")
+            }
+
+            store.onerror = function(event2) {
+                console.error(FAILED_DELETING_DB)
+            }
+        }
+    } 
+
+    $: value, loadModel();
+    
 </script>
 
 {#if !downloadingmodel}
@@ -396,3 +434,7 @@
       </div>
     </form>
 </dialog>
+
+<button class="btn-outline rounded-md. absolute bottom-4 left-4 btn-error" on:click={() => deleteDatabase()}>
+    Delete Models
+</button>
