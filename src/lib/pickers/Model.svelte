@@ -25,7 +25,9 @@
     export let WHISPER_RETURN_DATA = undefined;
     export let STORED_MODEL = false;
 
-
+    // Values for the Modal
+    let MODEL_TITLE = "Download Model?";
+    let INTERNET_NOT_AVAILABLE = false;
     // Available Models
     const original_models = {
         "ggml-model-whisper-base.bin": "Base",
@@ -46,7 +48,6 @@
     
     let CANCEL_DOWNLOAD = false;
 
-    let MODEL_TITLE = "Download Model?";
 
     const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
 
@@ -399,6 +400,20 @@
         }
     } 
 
+    // Check if the User can Download Models 
+    window.addEventListener('offline', () => {
+        MODEL_TITLE = "⚠️ You are offline!"
+        INTERNET_NOT_AVAILABLE = true;
+        console.log('Became offline')
+    });
+
+    window.addEventListener('online', () => {
+        MODEL_TITLE = "Download Model?"
+        INTERNET_NOT_AVAILABLE = false;
+        console.log('Became online')
+    });
+
+
     $: value, loadModel();
     
 </script>
@@ -422,15 +437,25 @@
 <dialog bind:this={popup} class="modal">
     <form method="dialog" class="modal-box">
       <h3 class="font-bold text-lg">{MODEL_TITLE}</h3>
-      <p class="py-4">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</p>
-      <div class="modal-action">
+        {#if !INTERNET_NOT_AVAILABLE}
+            <p class="py-4">The Model could not be found on your device. This will start a download operation of the selected model which weight: <b>{MODEL_TO_SIZE[value]}</b> MB. Do you want to proceed?</p>
+        {:else}
+            <p class="py-4">Video2SRT is currently offline! You can transcribe your video files with the downloaded models! If you wish to download more models, an internet connection is required!</p>
+        {/if}
+        <div class="modal-action">
         <!-- if there is a button in form, it will close the modal -->
+        {#if !INTERNET_NOT_AVAILABLE}
         <button on:click={() => popup.classList.remove("modal-open")}>
             No
         </button>
         <button on:click={() => downloadModel()}>
             Yes
         </button>
+        {:else}
+        <button on:click={() => popup.classList.remove("modal-open")}>
+            Understood
+        </button>
+        {/if}
       </div>
     </form>
 </dialog>
