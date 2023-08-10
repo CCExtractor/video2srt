@@ -1,6 +1,22 @@
-name: Build PWA to APK
 on: [push]
+
 jobs:
-  uses: sharadcodes/pwa-to-apk-action@v1.0.0
-  with:
-    project-root-folder: '.'
+  pwa_to_apk_job:
+    runs-on: ubuntu-latest
+    name: PWA to APK
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        # Running PWA to apk action for apk generation
+      - name: Running PWA to APK action
+        uses: sharadcodes/pwa-to-apk-action@v1.0.0
+        with:
+          project-root-folder: "."
+        # This one below is a seperate action which I'm using for releasing apk
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: '*.apk' # Selecting all the apk files
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: v1.0.0 # this is used in releases and has nothing to do with the pwa-to-apk-action
+          # it is only used in softprops/action-gh-release action
