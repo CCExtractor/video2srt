@@ -1,0 +1,42 @@
+{
+  "packageId": "org.ccextractor.video2srt.twa",
+  "host": "video2srt.ccextractor.org",
+  "name": "Video2SRT",
+  "launcherName": "Video2SRT",
+  "display": "standalone",
+  "themeColor": "#87F6FF",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#87F6FF",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://video2srt.ccextractor.org/images/icons/icon-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/Users/matejplavevski/Documents/Projects/GSoC/whisper-transcribe/android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://video2srt.ccextractor.org/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://video2srt.ccextractor.org/",
+  "minSdkVersion": 19,
+  "orientation": "any",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1"
+}
