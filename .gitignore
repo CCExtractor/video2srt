@@ -71,6 +71,8 @@ captures/
 .externalNativeBuild/
 .cxx/
 *.apk
+*.aab
+*.idsig
 output.json
 
 # IntelliJ
