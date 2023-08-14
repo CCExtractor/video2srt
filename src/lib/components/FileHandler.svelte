@@ -16,13 +16,14 @@
     let track_data: Array<object> = [];
 
     let executed: boolean = false;
-    let hide_tracks: boolean = false;
+    let hide_tracks: boolean = true;
+    let dragged_file: boolean = false;
 
     export let video_url;
     export let audio_data;
     export let video_type;
 
-
+    let IS_AUDIO_FILE;
 
     $: if (files) {
         if(!executed) {
@@ -31,6 +32,7 @@
             console.log(`${files[0].name}: ${files[0].size} bytes`);
             video_url = URL.createObjectURL(files[0]);
             video_type = files[0].type;
+            dragged_file = true;
 
             // 2. Look Up Audio Tracks
             audio_tracks.listAudioTracks(files[0]).then((data) => {
@@ -40,11 +42,14 @@
 
                 if (track_data.length == 1) {
                     value = track_data[0]['index']
+                    extract_audio()
                 }
 
                 if (track_data.length == 0) {
                     alert(NO_AUDIO_TRACK)
                 }
+                hide_tracks = false;
+                dragged_file = false;
             }).catch((err: Error) => {
                 console.log(err.message)
                 console.log(NO_AUDIO_TRACK)
@@ -61,10 +66,14 @@
     async function extract_audio () {
         console.log('exec')
         console.log(value)
-        
-        if(value != undefined){
+
+        if(value == undefined) {
+            return;
+        }
+
+        if(value != 0 || track_data.length != 0){
             await track_extract.extractAudio(value, files[0]).then((data) => {
-                hide_tracks = true;
+                hide_tracks = false;
                 console.log(data)
                 console.log('FILEHANDLER')
                 console.log(audio_data)
@@ -90,6 +99,10 @@
 
   <FindAudioTracks bind:this={audio_tracks}></FindAudioTracks>
   <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data  }></ExtractAudioTracks>
+
+{#if dragged_file}
+    <progress class="progress w-56"></progress>
+{/if}
 
 {#if !hide_tracks}
     <select bind:value class="select select-bordered">
