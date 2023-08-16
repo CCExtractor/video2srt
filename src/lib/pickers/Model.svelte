@@ -22,8 +22,9 @@
     export let threads = 16;
     // Values for the UI
     export let value = undefined;
-    export let WHISPER_RETURN_DATA = undefined;
-    export let STORED_MODEL = false;
+    export let WHISPER_RETURN_DATA: boolean = undefined;
+    export let STORED_MODEL: boolean = false;
+    export let TRANSLATE_FILE: boolean = false;
 
     // Values for the Modal
     let MODEL_TITLE = "Download Model?";
@@ -286,7 +287,7 @@
         }
 
         WHISPER_RETURN_DATA = "loading";
-        WHISPER_RETURN_DATA = Module.full_default(model, audio, lang, `${threads}`, false);
+        WHISPER_RETURN_DATA = Module.full_default(model, audio, lang, `${threads}`, TRANSLATE_FILE);
 
         
         console.log(WHISPER_RETURN_DATA);

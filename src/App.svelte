@@ -29,8 +29,7 @@
   let SUB_DATA = [];
   let language = "en";
   let sent_notification = false;
-
-  //let convert_to_srt;
+  let translate_file = false;
 
   function extract_subs() {
     if (audio_data == undefined) {
@@ -86,9 +85,18 @@
       bind:useWhisper
       bind:WHISPER_RETURN_DATA={whisper_captions}
       bind:STORED_MODEL={stored_model}
+      bind:TRANSLATE_FILE={translate_file}
       {threads}
     />
     <Languages bind:value={language} class="w-full md:w-1/2" />
+
+    {#if language != "en"}
+      <label class="label cursor-pointer">
+        <span class="label-text">Translate?</span> 
+        <input type="checkbox" bind:checked={translate_file} class="checkbox checkbox-primary" />
+      </label>
+    {/if}
+
   </div>
   {#if stored_model}
     <p style="color:green">Model Ready to use!</p>
