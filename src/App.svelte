@@ -114,12 +114,14 @@
       step="1"
       id="stepper"
     />
-    <label for="stepper" class="tooltip w-full md:w-[30%] text-lg" data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine">Threads in use: {threads} </label>
+    <label for="stepper" class="tooltip w-full md:w-[30%] text-lg" data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine" id="label-stepper">Threads in use: {threads} </label>
   </div>
   <button
     class="btn btn-disabled w-full md:w-1/2"
     bind:this={convert_button}
-    on:click={extract_subs}>Convert</button
+    on:click={extract_subs}
+    id="convert-button"
+    >Convert</button
   >
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
     <p>Loading... Depending on the audio length, it may take time</p>

@@ -54,10 +54,10 @@
             State = "Notifications denied"
         }
     }
-    $: Notification.permission,permissions_changed();
+    $: if (("Notification" in window)) {Notification.permission,permissions_changed()};
 
 </script>
 
 {#if !HIDE_NOTIFICATION_BUTTON }
-<button bind:this={btn} on:click={setup_notifications} class="btn btn-outline rounded-md. absolute top-4 left-4">{State}</button>
+<button bind:this={btn} on:click={setup_notifications} class="btn btn-outline rounded-md. absolute top-4 left-4" id="subscribe-notifications-button">{State}</button>
 {/if}

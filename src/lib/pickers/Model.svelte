@@ -420,7 +420,7 @@
 </script>
 
 {#if !downloadingmodel}
-<select class="select select-bordered w-[60%]" bind:value>
+<select class="select select-bordered w-[60%]" bind:value id="models-selector">
     <option disabled selected>Select Model for Whisper</option>
     {#each Object.keys(available_models) as elem}
         <!--- Idk how this one shows up tbh. -->
@@ -461,6 +461,6 @@
     </form>
 </dialog>
 
-<button class="btn-outline rounded-md. absolute bottom-4 left-4 btn-error" on:click={() => deleteDatabase()}>
+<button class="btn-outline rounded-md. absolute bottom-4 left-4 btn-error" on:click={() => deleteDatabase()} id="delete-models-button">
     Delete Models
 </button>

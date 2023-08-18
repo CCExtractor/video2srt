@@ -2,7 +2,7 @@
     export let value;
 </script>
 
-<select class="select select-bordered w-[40%]" bind:value>
+<select class="select select-bordered w-[40%]" bind:value id="languages">
     <option selected disabled>Select Language</option>
     <option value="en">English</option>
     <option value="ar">Arabic</option>
