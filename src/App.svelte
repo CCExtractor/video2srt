@@ -10,6 +10,7 @@
   } from "./lib/subtitle_conversions/WebVTT.svelte";
   import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
   import Notifications from "./lib/components/Notifications.svelte";
+  import {getFinishedSeconds} from "./lib/get_seconds";
 
   let audio_data;
   let useWhisper;
@@ -17,7 +18,8 @@
   let whisper_captions;
   let stored_model;
   let convert_button: HTMLButtonElement;
-  let threads = 16;
+  let threads: number = 16;
+  let HIDE_CONVERT_BUTTON: boolean = false;
 
   // Functions
   let send_notification;
@@ -27,15 +29,21 @@
   let video_type;
 
   let SUB_DATA = [];
-  let language = "en";
-  let sent_notification = false;
-  let translate_file = false;
+  let language: string = "en";
+  let sent_notification: boolean = false;
+  let translate_file: boolean = false;
+
+  // Progress Variables
+  let TOTAL_VIDEO_LENGTH: number = undefined;
+  let PERCENTAGE_TRANSCRIBED_VIDEO: number = undefined;
+  let TRANSCRIPTION_COMPLETE: boolean = false;
 
   function extract_subs() {
     if (audio_data == undefined) {
       return;
     }
     console.log(audio_data);
+    HIDE_CONVERT_BUTTON = true;
     useWhisper(audio_data, language);
   }
 
@@ -60,6 +68,11 @@
     console.log(SUB_DATA);
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
+
+    // Progress Stuff
+    PERCENTAGE_TRANSCRIBED_VIDEO = (getFinishedSeconds(SUB_DATA[SUB_DATA.length - 1]) / TOTAL_VIDEO_LENGTH) * 100;
+    PERCENTAGE_TRANSCRIBED_VIDEO = Math.round(PERCENTAGE_TRANSCRIBED_VIDEO * 100) / 100
+
   }
 
   function finishedSubs(e) {
@@ -67,6 +80,7 @@
       sent_notification = true;
       console.log("FINISHED!");
       send_notification();
+      TRANSCRIPTION_COMPLETE = true;
     }
   }
 
@@ -102,7 +116,7 @@
     <p style="color:green">Model Ready to use!</p>
   {/if}
   <hr class="w-full" />
-  <FileHandler bind:audio_data bind:video_url class="w-full" />
+  <FileHandler bind:audio_data bind:video_url bind:total_video_length={TOTAL_VIDEO_LENGTH} class="w-full" />
   <hr class="w-full" />
   <div class="flex flex-col md:flex-row gap-3 w-full items-center">
     <input
@@ -116,6 +130,7 @@
     />
     <label for="stepper" class="tooltip w-full md:w-[30%] text-lg" data-tip="Reducing the number of threads will increase the time required for generation but decrease the load on the machine" id="label-stepper">Threads in use: {threads} </label>
   </div>
+  {#if !HIDE_CONVERT_BUTTON}
   <button
     class="btn btn-disabled w-full md:w-1/2"
     bind:this={convert_button}
@@ -123,11 +138,18 @@
     id="convert-button"
     >Convert</button
   >
+  {/if}
   {#if whisper_captions == 0 && window.SUB_DATA.length == 0}
+    <span class="loading loading-dots loading-lg"></span>
     <p>Loading... Depending on the audio length, it may take time</p>
-    {whisper_captions}
   {:else if whisper_captions == 0 && window.SUB_DATA.length != 0}
-    <h5>You will see progress in real-time</h5>
+    {#if !TRANSCRIPTION_COMPLETE}
+    <h5>You will see progress in real-time.</h5>
+    <h2>Transcribed: <b>{PERCENTAGE_TRANSCRIBED_VIDEO}</b>%</h2>
+    <progress class="progress progress-info w-56" value={PERCENTAGE_TRANSCRIBED_VIDEO} max="100"></progress>
+    {:else}
+    <h2 style="color:green">Transcribed!</h2>
+    {/if}
     {#each SUB_DATA as sub}
       <p>{sub}</p>
     {/each}

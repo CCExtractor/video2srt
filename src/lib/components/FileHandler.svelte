@@ -1,6 +1,6 @@
 <script lang="ts">
     /**
-     * The go
+     * Handles the functionality behind the upload button and converting to an audio file
     */
 
     import ExtractAudioTracks from "../audio/ExtractAudioTracks.svelte";
@@ -11,7 +11,7 @@
     let files: FileList;
     let audio_tracks;
     let track_extract;
-    let value = 0;
+    let value: number = 0;
 
     let track_data: Array<object> = [];
 
@@ -22,6 +22,7 @@
     export let video_url;
     export let audio_data;
     export let video_type;
+    export let total_video_length: number;
 
     let IS_AUDIO_FILE;
 
@@ -98,7 +99,7 @@
 {/if}
 
   <FindAudioTracks bind:this={audio_tracks}></FindAudioTracks>
-  <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data  }></ExtractAudioTracks>
+  <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data} bind:TOTAL_AUDIO_LENGTH={total_video_length}></ExtractAudioTracks>
 
 {#if dragged_file}
     <progress class="progress w-56"></progress>

@@ -42,6 +42,6 @@
     $: $FILENAME, filename = $FILENAME
 </script>
 
-<a href={file_contents} download={filename}><button class="btn-secondary">
+<a href={file_contents} download={filename}><button class="btn btn-success">
     Download WebVTT
 </button></a>

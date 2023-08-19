@@ -3,7 +3,7 @@
     */
     import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
-    let progress = 0;
+    let progress: number = 0;
     let ProgressMeter:HTMLDivElement;
 
     const ffmpeg = createFFmpeg({ 
@@ -21,6 +21,7 @@
     let src;
 
     export let BUFFER_AUDIO_DATA = undefined;
+    export let TOTAL_AUDIO_LENGTH: number = 0;
 
     export async function extractAudio(ind: Number, file: File) {
         /** Extract an audio track given a particular audio file and an index
@@ -60,6 +61,7 @@
 
             audioContext.decodeAudioData(buffer.buffer).then(function(decodedData) {
                 console.log(decodedData)
+                TOTAL_AUDIO_LENGTH = decodedData.duration
 
                 var offlineContext = new OfflineAudioContext(decodedData.numberOfChannels, decodedData.length, decodedData.sampleRate);
                 var source = offlineContext.createBufferSource();
