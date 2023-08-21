@@ -4,11 +4,13 @@
   import Languages from "./lib/pickers/Languages.svelte";
   import SRT from "./lib/subtitle_conversions/SRT.svelte";
   import { convert_to_srt } from "./lib/subtitle_conversions/SRT.svelte";
+  import { convert_to_txt } from "./lib/subtitle_conversions/TXT.svelte";
   import {
     convert_to_webvtt,
     HREF,
   } from "./lib/subtitle_conversions/WebVTT.svelte";
   import WebVtt from "./lib/subtitle_conversions/WebVTT.svelte";
+  import TXT from "./lib/subtitle_conversions/TXT.svelte";
   import Notifications from "./lib/components/Notifications.svelte";
   import {getFinishedSeconds} from "./lib/get_seconds";
 
@@ -68,6 +70,7 @@
     console.log(SUB_DATA);
     convert_to_srt(SUB_DATA);
     convert_to_webvtt(SUB_DATA);
+    convert_to_txt(SUB_DATA);
 
     // Progress Stuff
     PERCENTAGE_TRANSCRIBED_VIDEO = (getFinishedSeconds(SUB_DATA[SUB_DATA.length - 1]) / TOTAL_VIDEO_LENGTH) * 100;
@@ -159,6 +162,7 @@
     </video>
     <WebVtt />
     <SRT />
+    <TXT />
   {/if}
   <Notifications bind:send_notification />
 </main>
