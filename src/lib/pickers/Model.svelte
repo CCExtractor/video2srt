@@ -1,7 +1,10 @@
 <script lang="ts">
+    /**
+     * Model.svelte <- All the interactions with the Whisper Model and IndexDB.
+     */
     let popup:HTMLDialogElement;
     let downloadingmodel:boolean = false;
-    let progressCur = 0;
+    let progressCur: number = 0;
 
     import { 
         REQUEST_FAILED, 
@@ -19,18 +22,18 @@
     import { MODEL_TO_SIZE } from './file_sizes.js';
 
 
-    export let threads = 16;
+    export let threads: number = 16;
     // Values for the UI
-    export let value = undefined;
+    export let value: string = undefined;
     export let WHISPER_RETURN_DATA: boolean = undefined;
     export let STORED_MODEL: boolean = false;
     export let TRANSLATE_FILE: boolean = false;
 
     // Values for the Modal
-    let MODEL_TITLE = "Download Model?";
-    let INTERNET_NOT_AVAILABLE = false;
+    let MODEL_TITLE: string = "Download Model?";
+    let INTERNET_NOT_AVAILABLE: boolean = false;
     // Available Models
-    const original_models = {
+    const original_models: {[key: string]: string} = {
         "ggml-model-whisper-base.bin": "Base",
         "ggml-model-whisper-base.en.bin": "Base EN",
         "ggml-model-whisper-small.bin": "Small",
@@ -39,15 +42,15 @@
         "ggml-model-whisper-tiny.en.bin": "Tiny EN"
     }
     let available_models = Object.assign({}, original_models);
-    let BUILT_MENU = false;
+    let BUILT_MENU: boolean = false;
 
     // Values for the Database
-    const DB_NAME = "WHISPER_TRANSCRIBE";
-    const DB_VERSION = 1;
+    const DB_NAME: string = "WHISPER_TRANSCRIBE";
+    const DB_VERSION: number = 1;
 
-    const WHISPER_FILE_NAME = "whisper.bin";
+    const WHISPER_FILE_NAME: string = "whisper.bin";
     
-    let CANCEL_DOWNLOAD = false;
+    let CANCEL_DOWNLOAD: boolean = false;
 
 
     const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB

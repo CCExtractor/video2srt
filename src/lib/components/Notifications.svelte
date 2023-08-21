@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
     /**
      * Send Notifications when Transcription is complete.
     */
-    let HIDE_NOTIFICATION_BUTTON = false;
-    let State = "Subscribe to Notifications";
+    let HIDE_NOTIFICATION_BUTTON: boolean = false;
+    let State: string = "Subscribe to Notifications";
     let btn:HTMLButtonElement;
 
     const setup_notifications = function() {
@@ -25,7 +23,7 @@
     }
 
     export const send_notification = function() {
-        const text = `Video has been transcribed!`;
+        const text: string = `Video has been transcribed!`;
         const notification = new Notification("Video2Srt", { body: text });
         console.log(notification)
 
