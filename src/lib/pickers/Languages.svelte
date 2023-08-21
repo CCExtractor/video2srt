@@ -1,5 +1,8 @@
 <script lang="ts">
-    export let value;
+    /**
+     * Languages - A Component for showing all the languages Whisper supports
+    */
+    export let value: string;
 </script>
 
 <select class="select select-bordered w-[40%]" bind:value id="languages">
