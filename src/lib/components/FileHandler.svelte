@@ -24,7 +24,9 @@
     export let video_type;
     export let total_video_length: number;
 
-    let IS_AUDIO_FILE;
+    // Error Dialog
+    let ERROR_EXISTS: boolean = false;
+    let ERROR_MESSAGE: string;
 
     $: if (files) {
         if(!executed) {
@@ -47,15 +49,20 @@
                 }
 
                 if (track_data.length == 0) {
-                    alert(NO_AUDIO_TRACK)
+                    ERROR_MESSAGE = NO_AUDIO_TRACK
+                    ERROR_EXISTS = true
+                    executed = false;
+                    files = null;
+                    hide_tracks = true;
+                    return;
                 }
+                
                 hide_tracks = false;
                 dragged_file = false;
             }).catch((err: Error) => {
-                console.log(err.message)
-                console.log(NO_AUDIO_TRACK)
+                ERROR_EXISTS = true;
                 if (err.message == INVALID_FILE) {
-                    alert(err) 
+                    ERROR_MESSAGE = err.message
                     files = null
                     executed = false;
                 }
@@ -101,7 +108,7 @@
   <FindAudioTracks bind:this={audio_tracks}></FindAudioTracks>
   <ExtractAudioTracks bind:this={track_extract} bind:BUFFER_AUDIO_DATA={audio_data} bind:TOTAL_AUDIO_LENGTH={total_video_length}></ExtractAudioTracks>
 
-{#if dragged_file}
+{#if dragged_file && !ERROR_EXISTS}
     <progress class="progress w-56"></progress>
 {/if}
 
@@ -118,3 +125,10 @@
     </select>
 {/if}
 </div>
+
+{#if ERROR_EXISTS}
+<div class="alert alert-error">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>{ERROR_MESSAGE}</span>
+  </div>
+{/if}

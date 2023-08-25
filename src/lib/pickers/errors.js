@@ -2,8 +2,7 @@
  * The responsible error messages related to downloading a model
  */
 export const REQUEST_FAILED = `
-There was an error downloading this particular model of whisper!
-Check your internet connection
+There was an error downloading this particular model of whisper! The Client could not reach the server, to retrieve the model.
 `
 
 export const NOT_SUPPORTED = `

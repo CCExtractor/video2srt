@@ -52,6 +52,9 @@
     
     let CANCEL_DOWNLOAD: boolean = false;
 
+    // values for Error Dialog;
+    let ERROR_EXISTS: boolean = false;
+    let ERROR_MESSAGE: string = undefined;
 
     const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
 
@@ -66,6 +69,8 @@
         }
 
         if (!navigator.storage || !navigator.storage.estimate) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = NOT_SUPPORTED;
             throw new Error(NOT_SUPPORTED);
         }
 
@@ -74,20 +79,26 @@
 
         // Something Went Wrong
         connection.onerror = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = CANNOT_ACCESS_INDEXDB;
             console.error(error);
             throw new Error(CANNOT_ACCESS_INDEXDB)
         }
 
         // An Error connecting to the database
         connection.onblocked = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = INDEXDB_BLOCKED;
             console.error(error);
             throw new Error(INDEXDB_BLOCKED)
         }
 
         // A Transaction was aborted
         connection.onabort = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = INDEXDB_ABORT;
             console.error(error);
-            throw new Error()
+            throw new Error(INDEXDB_ABORT)
         }
 
         // There was a change of the database version
@@ -112,6 +123,8 @@
 
             // Failure to Retrieve data
             connection.onerror = function(event) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = CANNOT_RETRIEVE_DATA;
                 throw new Error(CANNOT_RETRIEVE_DATA)
             }
 
@@ -136,18 +149,24 @@
 
              // Something Went Wrong
             connection.onerror = function(error) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = CANNOT_ACCESS_INDEXDB;
                 console.error(error);
                 throw new Error(CANNOT_ACCESS_INDEXDB)
             }
 
             // An Error connecting to the database
             connection.onblocked = function(error) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = CANNOT_ACCESS_INDEXDB;
                 console.error(error);
                 throw new Error(INDEXDB_BLOCKED)
             }
 
             // A Transaction was aborted
             connection.onabort = function(error) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = INDEXDB_ABORT;
                 console.error(error);
                 throw new Error(INDEXDB_ABORT)
             }
@@ -166,6 +185,8 @@
                     request = store.put(data, value);
                 } catch (err) {
                     console.error(err)
+                    ERROR_EXISTS = true;
+                    ERROR_MESSAGE = FAILED_TO_STORE_IN_DB;
                     throw new Error(FAILED_TO_STORE_IN_DB);
                 }
 
@@ -179,6 +200,8 @@
                 }
 
                 request.onerror = function (error) {
+                    ERROR_EXISTS = true;
+                    ERROR_MESSAGE = FAILED_TO_STORE_IN_DB;
                     throw new Error(FAILED_TO_STORE_IN_DB);
                 }
 
@@ -212,6 +235,8 @@
             },
         }).then(async (data) => {
             if(data.status != 200) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = REQUEST_FAILED;
                 throw new Error(REQUEST_FAILED)
             }
 
@@ -265,6 +290,9 @@
 
         }).catch((err: Error) => {
             console.error(err)
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = err.message;
+            console.log("EXECUTED ERROR")
             throw new Error(REQUEST_FAILED)
         });
 
@@ -312,18 +340,24 @@
 
         // Something Went Wrong
         connection.onerror = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = CANNOT_ACCESS_INDEXDB;
             console.error(error);
             throw new Error(CANNOT_ACCESS_INDEXDB)
         }
 
         // An Error connecting to the database
         connection.onblocked = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = CANNOT_ACCESS_INDEXDB;
             console.error(error);
             throw new Error(INDEXDB_BLOCKED)
         }
 
         // A Transaction was aborted
         connection.onabort = function(error) {
+            ERROR_EXISTS = true;
+            ERROR_MESSAGE = INDEXDB_ABORT;
             console.error(error);
             throw new Error(INDEXDB_ABORT)
         }
@@ -343,6 +377,8 @@
             let request = store.openCursor();
             request.onerror = function(event) {
                 console.error(`Failed Fetching Data: ${event}`);
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = FAILED_QUERYING_MODELS;
                 throw new Error(FAILED_QUERYING_MODELS)
             };
 
@@ -394,11 +430,13 @@
                 //BUILT_MENU = false;
                 //build_menu()
 
-                location.reload()
                 alert("Models have been deleted")
+                location.reload()
             }
 
             store.onerror = function(event2) {
+                ERROR_EXISTS = true;
+                ERROR_MESSAGE = FAILED_DELETING_DB;
                 console.error(FAILED_DELETING_DB)
             }
         }
@@ -467,3 +505,10 @@
 <button class="btn-outline rounded-md. absolute bottom-4 left-4 btn-error" on:click={() => deleteDatabase()} id="delete-models-button">
     Delete Models
 </button>
+
+{#if ERROR_EXISTS}
+<div class="alert alert-error">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>{ERROR_MESSAGE}</span>
+  </div>
+{/if}
