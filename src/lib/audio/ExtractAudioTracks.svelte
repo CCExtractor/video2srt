@@ -1,19 +1,14 @@
 <script lang="ts">
     /* ExtractAudioTracks.svelte
     */
-    import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-
+    import { FFmpeg } from '@ffmpeg/ffmpeg';
+    import { fetchFile } from '@ffmpeg/util'; 
+    
     let progress: number = 0;
     let ProgressMeter:HTMLDivElement;
 
-    const ffmpeg = createFFmpeg({ 
-        log: true,
-        progress: p => {
-            console.log(p)
-            progress = p['ratio'] * 100;
-            ProgressMeter.style.setProperty("--value",String(progress));
-        },
-    });
+    const ffmpeg = new FFmpeg();
+    
 
     let started: boolean = false;
     let player: HTMLAudioElement;
@@ -28,18 +23,34 @@
         * @param ind: The Index of the Track
         * @param file: The file we're extracting the track.
         */
+        
+        
         if(ind == 0 && file == undefined) {
             return;
         }
+        
+        ffmpeg.on("log", ({ message }) => {            
+            console.log(message);
+        });
 
+
+        ffmpeg.on("progress", (p) => {
+                console.log(p);
+                progress = p.ratio * 100;
+                ProgressMeter.style.setProperty("--value", String(progress));
+        });
+        
+        console.log("FFMPEG LOADING....");
         await ffmpeg.load();
+        console.log("FFMPEG LOADING COMPLETED!");
 
-        ffmpeg.FS('writeFile', file['name'], await fetchFile(file));
+        await ffmpeg.writeFile(file['name'], await fetchFile(file));
         started = true;
-        await ffmpeg.run('-i', file['name'], '-ar', '16000', '-map', `0:${ind}`, 'output_audio.wav');
+        await ffmpeg.exec('-i', file['name'], '-ar', '16000', '-map', `0:${ind}`, 'output_audio.wav');
         started = false;
 
-        const audio_data = ffmpeg.FS('readFile', 'output_audio.wav');
+        const audio_data = await ffmpeg.readFile('output_audio.wav');
+        
         show_audio = true;
         const blob = new Blob([audio_data.buffer], { type: 'audio/wav' })
         src = URL.createObjectURL(blob);
