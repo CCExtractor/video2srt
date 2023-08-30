@@ -2,12 +2,14 @@
     /* ExtractAudioTracks.svelte
     */
     import { FFmpeg } from '@ffmpeg/ffmpeg';
-    import { fetchFile } from '@ffmpeg/util'; 
+    import { fetchFile, toBlobURL } from '@ffmpeg/util'; 
     
     let progress: number = 0;
     let ProgressMeter:HTMLDivElement;
 
+    const baseURL = 'https://unpkg.com/browse/@ffmpeg/core@0.12.3/dist/esm'
     const ffmpeg = new FFmpeg();
+    
     
 
     let started: boolean = false;
@@ -41,7 +43,11 @@
         });
         
         console.log("FFMPEG LOADING....");
-        await ffmpeg.load();
+        await ffmpeg.load({
+            coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+            wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+            workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript'),
+        });
         console.log("FFMPEG LOADING COMPLETED!");
 
         await ffmpeg.writeFile(file['name'], await fetchFile(file));
