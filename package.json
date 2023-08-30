@@ -37,6 +37,7 @@
     "vitest": "^0.33.0"
   },
   "dependencies": {
+    "@ffmpeg/core": "^0.12.3",
     "@ffmpeg/ffmpeg": "^0.12.6",
     "@ffmpeg/util": "^0.12.1",
     "github-fork-ribbon-css": "^0.2.3"
