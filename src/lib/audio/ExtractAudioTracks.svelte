@@ -7,7 +7,7 @@
     let progress: number = 0;
     let ProgressMeter:HTMLDivElement;
 
-    const baseURL = 'https://unpkg.com/browse/@ffmpeg/core@0.12.3/dist/esm'
+    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm'
     const ffmpeg = new FFmpeg();
     
     
