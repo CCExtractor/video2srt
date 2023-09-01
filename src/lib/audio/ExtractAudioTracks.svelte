@@ -43,11 +43,13 @@
         });
         
         console.log("FFMPEG LOADING....");
-        await ffmpeg.load({
+        console.log(await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'))
+        ffmpeg.load({
             coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
             wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
             workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, 'text/javascript'),
-        });
+        })
+        
         console.log("FFMPEG LOADING COMPLETED!");
 
         await ffmpeg.writeFile(file['name'], await fetchFile(file));
