@@ -74,7 +74,12 @@
                 offlineContext.oncomplete = function(renderedBuffer) {
                     console.log(renderedBuffer)
                     console.log(renderedBuffer.renderedBuffer.getChannelData(0))
-                    console.log(renderedBuffer.renderedBuffer.getChannelData(1))
+                    try {
+                        console.log(renderedBuffer.renderedBuffer.getChannelData(1))
+                    } catch(e) {
+                        console.log("Doesn't have a second channel!")
+                        console.error(e.message)
+                    }
                     BUFFER_AUDIO_DATA = renderedBuffer.renderedBuffer.getChannelData(0)
                     return renderedBuffer.renderedBuffer.getChannelData(0)
                 };
