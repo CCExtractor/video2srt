@@ -8,8 +8,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         # Running PWA to apk action for apk generation
-      - name: Running PWA to APK action
-        uses: sharadcodes/pwa-to-apk-action@v1.0.0
+      - name: Running PWA2Apk
+        uses: ./.github/actions/pwa2Apk
         with:
           project-root-folder: "."
         # This one below is a seperate action which I'm using for releasing apk
