@@ -1,5 +1,5 @@
 name: 'PWA to APK action'
-description: 'Github Action for Converting your PWA to APK.'
+description: 'GitHub Action for Converting your PWA to APK.'
 branding:
   icon: 'package'
   color: 'orange'
@@ -10,8 +10,22 @@ inputs:
 outputs:
   message:
     description: "Status message from build script"
+    
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.project-root-folder }}
+
+steps:
+  - name: Upload APK artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: apk
+      path: '*.apk'
+
+  - name: Upload AAB artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: aab
+      path: '*.aab'
