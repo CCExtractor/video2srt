@@ -16,7 +16,10 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: '*.apk' # Selecting all the apk files
+          files: |
+            '*.apk'
+            '*.aab' 
+          # Selecting all the apk, aab files
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: v1.0.0 # this is used in releases and has nothing to do with the pwa-to-apk-action
           # it is only used in softprops/action-gh-release action
