@@ -16,16 +16,3 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.project-root-folder }}
-
-steps:
-  - name: Upload APK artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: apk
-      path: '*.apk'
-
-  - name: Upload AAB artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: aab
-      path: '*.aab'
