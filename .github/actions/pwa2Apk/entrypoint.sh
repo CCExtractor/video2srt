@@ -5,5 +5,5 @@ cd $1
 echo "========================= Building APK, it may take 3-4 minutes or more ========================="
 ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | bubblewrap build --skipPwaValidation --skipSigning
 cp ./*.apk ..
-cp ./*.aab ..
+cp ./app/build/outputs/bundle/release/*.aab ..
 echo "========================= APK building finished ========================="
