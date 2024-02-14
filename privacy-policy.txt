@@ -1,0 +1,28 @@
+Privacy Policy
+
+This Privacy Policy describes how Video2SRT ("App") collects, uses, and discloses your information.
+
+Data Collection and Use
+
+    Our app does not collect or store any personal information about you. This includes:
+        Name
+        Email address
+        Location
+        Device identifiers
+        Any other personally identifiable information
+    The app may process temporary data on your device for internal functionality, but this data is not stored or transmitted elsewhere.
+
+Information from Third Parties
+
+    If you use any third-party services through the app, such as social media logins or analytics tools, please review their privacy policies to understand their data practices.
+    Video2SRT is not responsible for the data collection or practices of any third-party services.
+
+Security
+
+    We take steps to protect your information from unauthorized access, disclosure, alteration, or destruction, but no internet or mobile application is completely secure.
+    We cannot guarantee the security of your information transmitted through the app.
+
+Changes to This Policy
+
+    We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+    You are advised to review this Privacy Policy periodically for any changes.
