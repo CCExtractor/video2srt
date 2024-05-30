@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cp env.sample .env && vite",
+    "dev": "[ -f .env ] || cp env.sample .env  && vite",
     "build": "[ -f .env ] || cp env.sample .env && vite build && cp _headers dist/_headers",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
